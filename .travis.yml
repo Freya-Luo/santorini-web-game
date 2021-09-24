@@ -1,0 +1,5 @@
+language: java
+jdk: oraclejdk16 
+script: 
+        - timeout 5m mvn site
+        - awk -F, '{ i[$2] += $4 + $5; ci[$2] += $5; b[$2] += $6 + $7; cb[$2] += $7 } END { for (a in i) { if (i[a]>0) print a, "\n\t", ci[a], "/", i[a], " instructions covered,", 100*ci[a]/i[a], "%"; if (b[a]>0) print "\t", cb[a], "/", b[a], " branches covered,", 100*cb[a]/b[a], "%"  ; } }' target/site/jacoco/jacoco.csv
