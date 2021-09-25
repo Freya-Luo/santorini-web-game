@@ -3,6 +3,7 @@ package edu.cmu.cs214.hw3;
 public class Tower {
     private int level;
     private boolean hasDome;
+    private final int TOP_LEVEL = 3;
 
     public Tower() {
         this.level = 0;
@@ -14,7 +15,7 @@ public class Tower {
     public void addLevel() { level += 1; }
 
     public void setDome() {
-        if (level == 3) {
+        if (level == TOP_LEVEL) {
             level += 1;
             hasDome = true;
         }
