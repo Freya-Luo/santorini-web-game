@@ -18,29 +18,30 @@ public final class Santorini {
         // Disable instantiating this class.
         throw new UnsupportedOperationException();
     }
-    private static void chooseMove(Worker worker, Cell moveTo) {
+    private static boolean chooseMove(Worker worker, Cell moveTo) {
         // Worker choose adjacent unoccupied cell to move to
-        List<Cell> neighbors = ISLAND_BOARD.getNeighbors(worker.getPosition());
+        List<Cell> neighbors = ISLAND_BOARD.getNeighbors(worker.getCurPosition());
         List<Cell> movableCells = worker.getMovableCells(neighbors);
         if(movableCells.contains(moveTo)) {
-            worker.setPosition(moveTo);
-        } else {
-            System.out.println("Oops! You cannot move to this cell.");
+            worker.setCurPosition(moveTo);
+            // If worker is at the top of 3-level tower, he wins!
+            // Set current player is a winner.
+            worker.checkIsWin();
+            return true;
         }
-        // If worker is at the top of 3-level tower, he wins!
-        // Set current player is a winner.
-        worker.checkIsWin();
+        return false;
     }
 
-    private static void chooseBuild(Worker worker, Cell buildOn) {
+    private static boolean chooseBuild(Worker worker, Cell buildOn) {
         // Worker choose adjacent unoccupied cell to build block/dome
-        List<Cell> neighbors = ISLAND_BOARD.getNeighbors(worker.getPosition());
+        List<Cell> neighbors = ISLAND_BOARD.getNeighbors(worker.getCurPosition());
         List<Cell> buildableCells = worker.getBuildableCells(neighbors);
         if(buildableCells.contains(buildOn)) {
             buildOn.getTower().addLevel();
-        }else {
-            System.out.println("Sorry! You cannot build on this cell.");
+            return true;
         }
+        worker.revertToPrePosition();
+        return false;
     }
 
     public static void main(String[] args) throws IOException {
@@ -59,28 +60,42 @@ public final class Santorini {
             if(setup.getName().equals(playerA.getName())) {
                 SANTORINI.setCurrentPlayer(playerA);
                 playerA.getWorkerByType(setup.getType())
-                        .setPosition(ISLAND_BOARD.getCell(setup.getStartPos()[0], setup.getStartPos()[1]));
+                        .setCurPosition(ISLAND_BOARD.getCell(setup.getStartPos()[0], setup.getStartPos()[1]));
             } else if (setup.getName().equals(playerB.getName())) {
                SANTORINI.setCurrentPlayer(playerB);
                 playerB.getWorkerByType(setup.getType())
-                        .setPosition(ISLAND_BOARD.getCell(setup.getStartPos()[0], setup.getStartPos()[1]));
+                        .setCurPosition(ISLAND_BOARD.getCell(setup.getStartPos()[0], setup.getStartPos()[1]));
             }
         }
 
         // Players take turns to move and build
         List<Action> mockRounds = loader.loadMockRoundsFromFile();
+        boolean moveSuccess = true;
+        boolean buildSuccess = true;
         for (Action action : mockRounds) {
-            SANTORINI.takeTurn();
+            if(moveSuccess && buildSuccess) {
+                SANTORINI.takeTurn();
+            }
             Worker currentWorker = SANTORINI.getCurrentPlayer().getWorkerByType(action.getType());
-            chooseMove(currentWorker, ISLAND_BOARD.getCell(action.getMoveTo()[0], action.getMoveTo()[1]));
+            moveSuccess = chooseMove(currentWorker, ISLAND_BOARD.getCell(action.getMoveTo()[0], action.getMoveTo()[1]));
+            if(!moveSuccess) {
+                System.out.println("Oops! You (" + SANTORINI.getCurrentPlayer().getName() +
+                        ") cannot move to this cell [" + action.getMoveTo()[0] + ", " +
+                        action.getMoveTo()[1] +"].");
+                continue;
+            }
+
             if (SANTORINI.hasWinner()) {
                 System.out.println("Congratulation! " + SANTORINI.getCurrentPlayer().getName() + " is the winner!");
-                break;
-            } else {
-                chooseBuild(currentWorker, ISLAND_BOARD.getCell(action.getBuildOn()[0], action.getBuildOn()[1]));
+                return;
+            }
+
+            buildSuccess = chooseBuild(currentWorker, ISLAND_BOARD.getCell(action.getBuildOn()[0], action.getBuildOn()[1]));
+            if(!buildSuccess) {
+                System.out.println("Sorry! You (" + SANTORINI.getCurrentPlayer().getName() +
+                        ") cannot build on this cell [" + action.getBuildOn()[0] + ", "
+                        + action.getBuildOn()[1] + "].");
             }
         }
-
     }
-
 }

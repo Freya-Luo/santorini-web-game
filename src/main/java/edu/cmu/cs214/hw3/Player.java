@@ -20,8 +20,12 @@ public class Player {
         return name;
     }
 
-    public void setName(String newName) {
-        name = newName;
+    public boolean setName(String newName) {
+        if (newName.equals("")) {
+            name = newName;
+            return true;
+        }
+        return false;
     }
 
     public Worker[] getAllWorkers() {
