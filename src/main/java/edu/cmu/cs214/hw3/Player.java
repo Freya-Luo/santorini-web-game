@@ -7,12 +7,12 @@ import java.util.List;
 
 public class Player {
     private String name;
-    private final List<Worker> workers;
+    private final Worker[] workers;
     private boolean isWinner;
 
     public Player(String name) {
         this.name = name;
-        this.workers = new ArrayList<>();
+        this.workers = new Worker[]{new Worker(WorkerType.TYPE_A, this), new Worker(WorkerType.TYPE_B, this)};
         this.isWinner = false;
     }
 
@@ -24,7 +24,7 @@ public class Player {
         name = newName;
     }
 
-    public List<Worker> getAllWorkers() {
+    public Worker[] getAllWorkers() {
         return workers;
     }
 
@@ -41,7 +41,7 @@ public class Player {
         return isWinner;
     }
 
-    public void setWinner() {
+    public void setIsWinner() {
         isWinner = true;
     }
 }

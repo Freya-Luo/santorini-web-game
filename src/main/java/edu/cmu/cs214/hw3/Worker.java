@@ -24,13 +24,33 @@ public class Worker {
         return position;
     }
 
+    /**
+     * This function
+     * @param newPosition
+     */
     public void setPosition(Cell newPosition) {
-        position = newPosition;
+        if(position == null) {
+            position = newPosition;
+        }
+        else if(position.getX() != newPosition.getX() || position.getY() != newPosition.getY()) {
+            position.setFree();
+            position = newPosition;
+        }
+        position.setOccupied();
     }
 
     public Player getPlayer() {
         return player;
     }
+
+    public boolean checkIsWin() {
+        if(!position.getTower().isCompleted() && position.getTower().getLevel() == 3) {
+            player.setIsWinner();
+            return true;
+        }
+        return false;
+    }
+
 
     /**
      * This function checks the eight neighbors of the worker's current position and

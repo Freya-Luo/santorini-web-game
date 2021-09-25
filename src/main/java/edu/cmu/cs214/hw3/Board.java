@@ -6,22 +6,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Board {
-    private static final int numsOfRows = 5;
-    private static final int numsOfCols = 5;
-    private Cell[][] islandBoard;
+    private static final int ROWSNUMBER = 5;
+    private static final int COLSNUMBER = 5;
+    private final Cell[][] islandBoard;
 
     public Board() {
-        this.islandBoard = new Cell[numsOfRows][numsOfCols];
+        this.islandBoard = new Cell[ROWSNUMBER][COLSNUMBER];
 
-        for(int i = 0; i < numsOfCols; i++) {
-            for(int j = 0; j < numsOfCols; j++) {
+        for(int i = 0; i < ROWSNUMBER; i++) {
+            for(int j = 0; j < COLSNUMBER; j++) {
                 this.islandBoard[i][j] = new Cell(i, j);
             }
         }
     }
 
     public Cell getCell(int x, int y) {
-        if(0 <= x && x < numsOfRows && 0 <= y && y < numsOfCols) {
+        if(0 <= x && x < ROWSNUMBER && 0 <= y && y < COLSNUMBER) {
             return islandBoard[x][y];
         }
         return null;
@@ -34,8 +34,8 @@ public class Board {
             int nX = cell.getX() + dir.getDir()[0];
             int nY = cell.getY() + dir.getDir()[1];
 
-            Cell neighbor;
-            if ((neighbor = getCell(nX, nY)) != null) {
+            Cell neighbor = getCell(nX, nY);
+            if (neighbor != null) {
                 neighbors.add(neighbor);
             }
         }

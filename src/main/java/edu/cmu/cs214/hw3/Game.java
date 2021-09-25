@@ -7,24 +7,24 @@ import java.util.List;
 
 public class Game {
     private final Board board;
-    private List<Player> players;
+    private Player[] players;
     private Player currentPlayer;
     private Phase phase;
 
     public Game() {
         this.board = new Board();
-        this.players = new ArrayList<>();
+        this.players = new Player[2];
         this.phase = Phase.PREPARING;
         this.currentPlayer = null;
     }
 
-    public List<Player> getPlayers() {
+    public Player[] getPlayers() {
         return players;
     }
 
     public void setPlayers(Player playerA, Player playerB) {
-        players.add(playerA);
-        players.add(playerB);
+        players[0] = playerA;
+        players[1] = playerB;
     }
 
     public Player getPlayerByName(String name) {
@@ -35,7 +35,7 @@ public class Game {
         }
         return null;
     }
-    
+
     public Player getCurrentPlayer() {
         return currentPlayer;
     }
@@ -43,10 +43,10 @@ public class Game {
     public void setCurrentPlayer(Player player) { currentPlayer = player; }
 
     public void takeTurn() {
-        if (players.indexOf(currentPlayer) == 0) {
-            currentPlayer = players.get(1);
+        if (currentPlayer == players[0]) {
+            currentPlayer = players[1];
         } else {
-            currentPlayer = players.get(0);
+            currentPlayer = players[0];
         }
     }
 
