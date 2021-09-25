@@ -24,10 +24,6 @@ public class Worker {
         return position;
     }
 
-    /**
-     * This function
-     * @param newPosition
-     */
     public void setPosition(Cell newPosition) {
         if(position == null) {
             position = newPosition;
@@ -43,12 +39,10 @@ public class Worker {
         return player;
     }
 
-    public boolean isWin() {
-        if(!position.getTower().isCompleted() && position.getTower().getLevel() == 3) {
+    public void checkIsWin() {
+        if(!position.getTower().isCompleted() && position.getTower().getLevel() == Tower.TOP) {
             player.setIsWinner();
-            return true;
         }
-        return false;
     }
 
 

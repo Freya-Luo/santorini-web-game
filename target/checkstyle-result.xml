@@ -1,18 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.45">
-<file name="C:\Users\y233l\Desktop\courses\17514\hw3\src\main\java\edu\cmu\cs214\hw3\Santorini.java">
-<error line="55" column="88" severity="error" message="&apos;3&apos; is a magic number." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
-<error line="56" column="85" severity="error" message="&apos;3&apos; is a magic number." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
-<error line="59" column="85" severity="error" message="&apos;3&apos; is a magic number." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
-<error line="59" column="88" severity="error" message="&apos;3&apos; is a magic number." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
-</file>
-<file name="C:\Users\y233l\Desktop\courses\17514\hw3\src\main\java\edu\cmu\cs214\hw3\Tower.java">
-<error line="6" column="23" severity="error" message="Name &apos;TOP_LEVEL&apos; must match pattern &apos;^[a-z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.MemberNameCheck"/>
-</file>
-<file name="C:\Users\y233l\Desktop\courses\17514\hw3\src\main\java\edu\cmu\cs214\hw3\utils\mockStepsLoader.java">
-<error line="10" column="14" severity="error" message="Name &apos;mockStepsLoader&apos; must match pattern &apos;^[A-Z][a-zA-Z0-9]*$&apos;." source="com.puppycrawl.tools.checkstyle.checks.naming.TypeNameCheck"/>
-</file>
-<file name="C:\Users\y233l\Desktop\courses\17514\hw3\src\main\java\edu\cmu\cs214\hw3\Worker.java">
-<error line="47" column="84" severity="error" message="&apos;3&apos; is a magic number." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
+<file name="C:\Users\y233l\Desktop\courses\17514\hw3\src\main\java\edu\cmu\cs214\hw3\utils\MockGameLoader.java">
 </file>
 </checkstyle>
