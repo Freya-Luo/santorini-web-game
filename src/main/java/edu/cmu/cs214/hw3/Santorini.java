@@ -1,7 +1,9 @@
 package edu.cmu.cs214.hw3;
 
+import edu.cmu.cs214.hw3.utils.Action;
 import edu.cmu.cs214.hw3.utils.Phase;
 import edu.cmu.cs214.hw3.utils.WorkerType;
+import edu.cmu.cs214.hw3.utils.mockStepsLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,8 +18,7 @@ public final class Santorini {
         // Disable instantiating this class.
         throw new UnsupportedOperationException();
     }
-    private static void oneMoveAndBuild(Worker worker, Cell moveTo, Cell buildOn) {
-        santorini.takeTurn();
+    private static void chooseMove(Worker worker, Cell moveTo) {
         // Worker choose adjacent unoccupied cell to move to
         List<Cell> neighbors = island.getNeighbors(worker.getPosition());
         List<Cell> movableCells = worker.getMovableCells(neighbors);
@@ -25,24 +26,18 @@ public final class Santorini {
             worker.setPosition(moveTo);
         }
         // If worker is at the top of 3-level tower, he wins!
-        if(worker.checkIsWin()) {
+        if(worker.isWin()) {
             return;
         }
+    }
+
+    private static void chooseBuild(Worker worker, Cell buildOn) {
         // Worker choose adjacent unoccupied cell to build block/dome
-        neighbors = island.getNeighbors(worker.getPosition());
+        List<Cell> neighbors = island.getNeighbors(worker.getPosition());
         List<Cell> buildableCells = worker.getBuildableCells(neighbors);
         if(buildableCells.contains(buildOn)) {
             buildOn.getTower().addLevel();
         }
-    }
-
-    private static boolean checkWinner() {
-        for(Player player: santorini.getPlayers()) {
-            if(player.isWinner()) {
-                return true;
-            }
-        }
-        return false;
     }
 
     public static void main(String[] args) throws IOException {
@@ -70,10 +65,19 @@ public final class Santorini {
 
 
         // Players take turns to move and build
-        // while(!checkWinner()) {
-            oneMoveAndBuild(workerA_A, island.getCell(1, 4), island.getCell(0, 4));
-            // ...
-        //}
+        List<Action> mockActions = new mockStepsLoader().loadMockStepsFromFile(new File("mockSantorini/mockSteps.csv"));
+        for (Action action : mockActions) {
+            santorini.takeTurn();
+            Worker currentWorker = santorini.getCurrentPlayer().getWorkerByType(action.getType());
+            chooseMove(currentWorker, island.getCell(action.getMoveTo()[0], action.getMoveTo()[1]));
+            if (santorini.hasWinner()) {
+                System.out.println("Congratulation! " + santorini.getCurrentPlayer().getName() + " is the winner!");
+                break;
+            } else {
+                chooseBuild(currentWorker, island.getCell(action.getBuildOn()[0], action.getBuildOn()[1]));
+            }
+        }
+
     }
 
 }

@@ -61,4 +61,13 @@ public class Game {
     public void setPhase(Phase newPhase) {
         phase = newPhase;
     }
+
+    public boolean hasWinner() {
+        for(Player player: players) {
+            if(player.isWinner()) {
+                return true;
+            }
+        }
+        return false;
+    }
 }

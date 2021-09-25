@@ -43,7 +43,7 @@ public class Worker {
         return player;
     }
 
-    public boolean checkIsWin() {
+    public boolean isWin() {
         if(!position.getTower().isCompleted() && position.getTower().getLevel() == 3) {
             player.setIsWinner();
             return true;
