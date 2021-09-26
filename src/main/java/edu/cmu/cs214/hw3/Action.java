@@ -1,6 +1,6 @@
-package edu.cmu.cs214.hw3.utils;
+package edu.cmu.cs214.hw3;
 
-import edu.cmu.cs214.hw3.Worker;
+import edu.cmu.cs214.hw3.utils.WorkerType;
 
 public class Action {
     private WorkerType type;

@@ -13,7 +13,7 @@ public class Cell {
         this.tower = new Tower();
     }
 
-    public Boolean isOccupied() { return isOccupied; }
+    public Boolean isOccupied() { return isOccupied || tower.isCompleted(); }
 
     public void setOccupied() {
         isOccupied = true;
@@ -27,6 +27,9 @@ public class Cell {
 
     public int getY() { return y; }
 
+    public int[] getGeogPair() {
+        return new int[]{x, y};
+    }
     public Tower getTower() {
         return tower;
     }

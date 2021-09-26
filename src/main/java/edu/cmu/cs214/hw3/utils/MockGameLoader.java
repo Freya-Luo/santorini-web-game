@@ -1,5 +1,7 @@
 package edu.cmu.cs214.hw3.utils;
 
+import edu.cmu.cs214.hw3.Action;
+
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -11,9 +13,7 @@ public class MockGameLoader {
 
     private final File file;
 
-    private WorkerType getType(String type) {
-        return WorkerType.valueOf(type);
-    }
+    private WorkerType getType(String type) { return WorkerType.valueOf(type); }
 
     private int[] getCellPos(String pos) {
         int[] cellPos = new int[2];

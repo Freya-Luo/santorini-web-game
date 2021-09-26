@@ -12,9 +12,15 @@ public class Tower {
 
     public int getLevel() { return level; }
 
-    public void addLevel() { level += 1; }
+    public void addLevel() {
+        if(level == TOP) {
+            setDome();
+        } else if (level < TOP) {
+            level += 1;
+        }
+    }
 
-    public void setDome() {
+    private void setDome() {
         if (level == TOP) {
             level += 1;
             hasDome = true;
@@ -29,11 +35,12 @@ public class Tower {
      * This functions checks if worker can successfully climb up to
      * this tower from his current position.
      *
-     * The worker can only move up a maximum of one level higher.
+     * The worker can only move up a maximum of one level higher and tower is not completed.
      * @param from The worker's current position.
      * @return True if worker can climb up to the tower; False otherwise.
      */
     public boolean isClimbable(Cell from) {
+        if(isCompleted()) return false;
         return level - from.getTower().getLevel() <= 1;
     }
 }

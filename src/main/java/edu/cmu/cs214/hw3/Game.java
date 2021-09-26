@@ -22,9 +22,14 @@ public class Game {
         return players;
     }
 
-    public void setPlayers(Player playerA, Player playerB) {
+    public boolean setPlayers(Player playerA, Player playerB) {
+        if(playerA == null || playerB == null) {
+            return false;
+        }
+
         players[0] = playerA;
         players[1] = playerB;
+        return true;
     }
 
     public Player getPlayerByName(String name) {
@@ -43,6 +48,8 @@ public class Game {
     public void setCurrentPlayer(Player player) { currentPlayer = player; }
 
     public void takeTurn() {
+        if(currentPlayer == null) return;
+
         if (currentPlayer == players[0]) {
             currentPlayer = players[1];
         } else {

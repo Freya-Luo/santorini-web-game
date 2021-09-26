@@ -26,22 +26,26 @@ public class Worker {
         return curPosition;
     }
 
+    public Cell getPrePosition() { return prePosition; }
+
     public void revertToPrePosition() {
         curPosition.setFree();
         curPosition = prePosition;
         curPosition.setOccupied();
     }
 
-    public void setCurPosition(Cell newPosition) {
-        if(curPosition == null) {
-            curPosition = newPosition;
+    public boolean setCurPosition(Cell newPosition) {
+        if(newPosition.isOccupied()){
+            return false;
         }
-        else if(curPosition.getX() != newPosition.getX() || curPosition.getY() != newPosition.getY()) {
+
+        if (curPosition != null) {
             prePosition = curPosition;
             prePosition.setFree();
-            curPosition = newPosition;
         }
+        curPosition = newPosition;
         curPosition.setOccupied();
+        return true;
     }
 
     public Player getPlayer() {
@@ -68,7 +72,7 @@ public class Worker {
         List<Cell> movableCells = new ArrayList<>();
 
         for(Cell cell : neighbors) {
-            if (!cell.isOccupied() && cell.getTower().isClimbable(curPosition)) {
+            if (!cell.isOccupied() && cell.getTower().isClimbable(curPosition) ) {
                 movableCells.add(cell);
             }
         }

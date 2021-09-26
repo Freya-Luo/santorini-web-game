@@ -4,6 +4,7 @@ import edu.cmu.cs214.hw3.utils.WorkerType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Player {
     private String name;
@@ -11,6 +12,9 @@ public class Player {
     private boolean isWinner;
 
     public Player(String name) {
+        if(name.equals("")) {
+            throw new IllegalArgumentException("Player cannot have an empty name.");
+        }
         this.name = name;
         this.workers = new Worker[]{new Worker(WorkerType.TYPE_A, this), new Worker(WorkerType.TYPE_B, this)};
         this.isWinner = false;
@@ -21,7 +25,7 @@ public class Player {
     }
 
     public boolean setName(String newName) {
-        if (newName.equals("")) {
+        if (!newName.equals("")) {
             name = newName;
             return true;
         }
