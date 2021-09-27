@@ -56,7 +56,7 @@ public class WorkerTest {
                 worker.getCurPosition().getTower().addLevel();
             }
 
-            worker.checkIsWin();
+            worker.checkIfWin();
             assertTrue(worker.getPlayer().isWinner());
         }
 
@@ -66,7 +66,7 @@ public class WorkerTest {
                 worker.getCurPosition().getTower().addLevel();
             }
 
-            worker.checkIsWin();
+            worker.checkIfWin();
             assertFalse(worker.getPlayer().isWinner());
         }
     }

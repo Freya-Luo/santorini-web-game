@@ -2,10 +2,6 @@ package edu.cmu.cs214.hw3;
 
 import edu.cmu.cs214.hw3.utils.WorkerType;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-
 public class Player {
     private String name;
     private final Worker[] workers;

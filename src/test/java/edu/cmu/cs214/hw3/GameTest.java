@@ -47,10 +47,10 @@ public class GameTest {
         game.setPlayers(playerB, playerA);
         game.setCurrentPlayer(playerA);
 
-        game.takeTurn();
+        game.takeTurns();
         assertEquals(playerB, game.getCurrentPlayer());
 
-        game.takeTurn();
+        game.takeTurns();
         assertEquals(playerA, game.getCurrentPlayer());
     }
 

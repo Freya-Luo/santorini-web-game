@@ -20,6 +20,11 @@ public class Board {
         }
     }
 
+    /**
+     * @param x Row
+     * @param y Column
+     * @return Cell at position (x, y) in board; Null if index is out of boundary.
+     */
     public Cell getCell(int x, int y) {
         if(0 <= x && x < ROWSNUMBER && 0 <= y && y < COLSNUMBER) {
             return islandBoard[x][y];
@@ -27,6 +32,12 @@ public class Board {
         return null;
     }
 
+    /**
+     * Get neighboring cells that are placed in eight directions. It only returns
+     * cell that is on the board.
+     * @param cell Center cell
+     * @return A list of neighbors that are on the board.
+     */
     public List<Cell> getNeighbors(Cell cell) {
         List<Cell> neighbors = new ArrayList<>();
 

@@ -28,17 +28,31 @@ public class Worker {
 
     public Cell getPrePosition() { return prePosition; }
 
+    /**
+     * If building fails, reset the workers to the previous position.
+     * @apiNote In principle, worker cannot move back to the previous position.
+     * However, this function is currently served to align with the logic of
+     * the mock interactions between user and system.
+     * It should be reconfigured/removed when GUI interface is integrated.
+     */
     public void revertToPrePosition() {
         curPosition.setFree();
         curPosition = prePosition;
         curPosition.setOccupied();
     }
 
+    /**
+     * Move to a new position, mark that cell as occupied.
+     * Free his previous position.
+     *
+     * @param newPosition Cell worker is going to move to.
+     * @return True if he can successfully move.
+     */
     public boolean setCurPosition(Cell newPosition) {
         if(newPosition.isOccupied()){
             return false;
         }
-
+        // Set the starting position.
         if (curPosition != null) {
             prePosition = curPosition;
             prePosition.setFree();
@@ -52,7 +66,10 @@ public class Worker {
         return player;
     }
 
-    public void checkIsWin() {
+    /**
+     * Worker (Player) wins if he climbs up to a level-3 tower.
+     */
+    public void checkIfWin() {
         if(!curPosition.getTower().isCompleted() && curPosition.getTower().getLevel() == Tower.TOP) {
             player.setIsWinner();
         }

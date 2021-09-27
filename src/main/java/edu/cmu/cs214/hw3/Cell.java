@@ -30,6 +30,7 @@ public class Cell {
     public int[] getGeogPair() {
         return new int[]{x, y};
     }
+
     public Tower getTower() {
         return tower;
     }

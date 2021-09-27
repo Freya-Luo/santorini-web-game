@@ -12,6 +12,11 @@ public class Tower {
 
     public int getLevel() { return level; }
 
+    /**
+     * Add level to the current tower. The top level can only up to 3,
+     * if it reaches 3, then the tower is capped with a dome and is considered
+     * as completed. Completed tower cannot be added more levels.
+     */
     public void addLevel() {
         if(level == TOP) {
             setDome();

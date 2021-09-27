@@ -2,9 +2,6 @@ package edu.cmu.cs214.hw3;
 
 import edu.cmu.cs214.hw3.utils.Phase;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Game {
     private final Board board;
     private Player[] players;
@@ -22,6 +19,7 @@ public class Game {
         return players;
     }
 
+    // The game needs at least 2 players to start.
     public boolean setPlayers(Player playerA, Player playerB) {
         if(playerA == null || playerB == null) {
             return false;
@@ -47,7 +45,10 @@ public class Game {
 
     public void setCurrentPlayer(Player player) { currentPlayer = player; }
 
-    public void takeTurn() {
+    /**
+     * Make 2 players to take turn after one set of valid moving and building.
+     */
+    public void takeTurns() {
         if(currentPlayer == null) return;
 
         if (currentPlayer == players[0]) {
@@ -69,6 +70,10 @@ public class Game {
         phase = newPhase;
     }
 
+    /**
+     * Check if the winner is generated.
+     * @return Game is finished if return true, false otherwise.
+     */
     public boolean hasWinner() {
         for(Player player: players) {
             if(player.isWinner()) {

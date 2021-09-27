@@ -11,7 +11,7 @@
              <ul>
                 <li>Game is running and winner does not determined yet. </li>
                 <li>Worker's current space and all neighboring spaces checked cannot beyond the board border.</li>
-                <li>At least 1 unoccupied neighboring space whose height is not higher 2 level than the current worker's height exists.</li>
+                <li>At least 1 unoccupied neighboring space whose height is not 2 level higher than the current worker's height exists.</li>
               </ul>
          </td>
      </tr>
@@ -21,7 +21,7 @@
             <ul>
                 <li>Worker's current space is set to occupied and if he wins is checked.</li>
                 <li>Worker's neighboring spaces are updated.</li>
-                <li>Worker's old space is set to unoccupied.</li>
+                <li>Worker's previous space is set to unoccupied.</li>
             </ul>
          </td>
      </tr>
