@@ -1,5 +1,7 @@
 package edu.cmu.cs214.hw3;
 
+import edu.cmu.cs214.hw3.models.Game;
+import edu.cmu.cs214.hw3.models.Player;
 import org.junit.Before;
 import org.junit.Test;
 

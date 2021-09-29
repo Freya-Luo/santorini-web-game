@@ -1,7 +1,11 @@
-package edu.cmu.cs214.hw3;
+package edu.cmu.cs214.hw3.utils;
 
-import edu.cmu.cs214.hw3.utils.WorkerType;
-
+/**
+ * This Action class closely depends on the MockGameLoader I created, which also
+ * serves to simplify testing. Also, by following the writeup of HW2, this class is
+ * not tested in this homework as all the public methods are getters. These contain
+ * trivial or non-essential functionalities.
+ */
 public class Action {
     private WorkerType type;
     private String name;

@@ -2,7 +2,9 @@ package edu.cmu.cs214.hw3;
 
 import edu.cmu.cs214.hw3.controller.ActionController;
 import edu.cmu.cs214.hw3.controller.GameController;
-import edu.cmu.cs214.hw3.utils.Phase;
+import edu.cmu.cs214.hw3.models.Board;
+import edu.cmu.cs214.hw3.models.Game;
+import edu.cmu.cs214.hw3.utils.Action;
 import edu.cmu.cs214.hw3.utils.MockGameLoader;
 
 import java.io.File;
@@ -28,14 +30,25 @@ public final class Santorini {
         List<Action> mockRounds = loader.loadMockRoundsFromFile();
 
         // Choose players and Game preparation
-        boolean canInit = GAME_CONTROLLER.initGame(mockSetup);
+        String[] names = loader.loadMockPlayerNamesFromFile();
+        boolean canInit = GAME_CONTROLLER.initGame(names[0], names[1]);
         if(!canInit) return;
 
         // Players picking starting position for workers
-        boolean canPickPositions = GAME_CONTROLLER.pickStartingPositions(mockSetup);
-        if(!canPickPositions) return;
+        for(Action setup: mockSetup) {
+            boolean canPickPositions = GAME_CONTROLLER.pickStartingPositions(setup.getName(), setup.getType(), setup.getStartPos());
+            if(!canPickPositions) return;
+        }
+
+        // All initializations have been done, game is ready to start
+        boolean isReady = GAME_CONTROLLER.readyGo();
+        if(!isReady) {
+            return;
+        }
 
         // Players take turns to move and build
-        GAME_CONTROLLER.runGame(mockRounds, ACTION_CONTROLLER);
+        for(Action round: mockRounds) {
+            GAME_CONTROLLER.hitRound(round.getType(), round.getMoveTo(), round.getBuildOn(), ACTION_CONTROLLER);
+        }
     }
 }

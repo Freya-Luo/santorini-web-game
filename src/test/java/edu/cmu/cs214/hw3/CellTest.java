@@ -1,5 +1,6 @@
 package edu.cmu.cs214.hw3;
 
+import edu.cmu.cs214.hw3.models.Cell;
 import org.junit.Before;
 import org.junit.Test;
 

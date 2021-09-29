@@ -1,8 +1,8 @@
 package edu.cmu.cs214.hw3.controller;
 
-import edu.cmu.cs214.hw3.Board;
-import edu.cmu.cs214.hw3.Cell;
-import edu.cmu.cs214.hw3.Worker;
+import edu.cmu.cs214.hw3.models.Board;
+import edu.cmu.cs214.hw3.models.Cell;
+import edu.cmu.cs214.hw3.models.Worker;
 
 import java.util.List;
 

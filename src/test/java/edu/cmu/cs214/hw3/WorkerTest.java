@@ -1,4 +1,8 @@
 package edu.cmu.cs214.hw3;
+import edu.cmu.cs214.hw3.models.Board;
+import edu.cmu.cs214.hw3.models.Cell;
+import edu.cmu.cs214.hw3.models.Player;
+import edu.cmu.cs214.hw3.models.Worker;
 import edu.cmu.cs214.hw3.utils.WorkerType;
 
 import org.junit.Before;

@@ -1,5 +1,4 @@
-package edu.cmu.cs214.hw3;
-
+package edu.cmu.cs214.hw3.models;
 import edu.cmu.cs214.hw3.utils.WorkerType;
 
 import java.util.ArrayList;
