@@ -22,12 +22,12 @@ public class GameController {
 
     /**
      * Initialize the game with two players and choose a starting player.
+     *
      * @param nameA Name of the first player
      * @param nameB Name of the second player
      * @return True if game can be successfully initialized, false if players are missing
      */
     public boolean initGame(String nameA, String nameB) {
-        if(game.getPhase() != Phase.PREPARING) return false;
         if(nameA == null || nameB == null) {
             System.out.println("Sorry, game needs at least 2 players to start.");
             return false;
@@ -43,6 +43,7 @@ public class GameController {
 
     /**
      * Pick a starting position for worker, which can only stand on an unoccupied cell.
+     *
      * @param name Name of the current player
      * @param type Type of the current chosen worker
      * @param position Starting position for the current worker
@@ -63,6 +64,10 @@ public class GameController {
          return true;
     }
 
+    /**
+     * Checks if all 4 workers are correctly placed on the board.
+     * @return True if the game is ready to run, false otherwise.
+     */
     public boolean readyGo() {
         boolean isReady = true;
         for(Worker worker : playerA.getAllWorkers()) {
@@ -89,6 +94,7 @@ public class GameController {
      * Two players take turns to move worker and build tower.
      * This method will reject invalid move or build. The next round can only be hit if
      * last round of another player is valid.
+     *
      * @param type Type of the current chosen worker
      * @param moveTo Position the worker is going to move to
      * @param buildOn Position the worker is going to build block/dome on

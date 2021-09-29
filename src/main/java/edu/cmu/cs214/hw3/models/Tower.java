@@ -25,6 +25,7 @@ public class Tower {
         }
     }
 
+    // keep the method private to hide the inner implementation of tower
     private void setDome() {
         if (level == TOP) {
             level += 1;

@@ -15,6 +15,7 @@ public class ActionController {
 
     /**
      * If the chosen position is movable, then worker moves to it.
+     *
      * @param worker Worker is currently picked
      * @param moveTo Position the worker is going to move to
      * @return True if he can successfully move, false otherwise
@@ -32,6 +33,7 @@ public class ActionController {
 
     /**
      * If the chosen position is buildable, then worker builds block/dome on it.
+     *
      * @param worker Worker is currently picked
      * @param buildOn Position the worker is going to build the block/dome on
      * @return True if he can successfully build, false otherwise

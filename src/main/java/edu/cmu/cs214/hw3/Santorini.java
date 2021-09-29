@@ -23,7 +23,7 @@ public final class Santorini {
         throw new UnsupportedOperationException();
     }
 
-
+    // The mock procedure inside main is basically the same as that in the integration tests.
     public static void main(String[] args) throws IOException {
         MockGameLoader loader = new MockGameLoader(new File("mockSantorini/mockSteps.csv"));
         List<Action> mockSetup = loader.loadMockSetupFromFile();

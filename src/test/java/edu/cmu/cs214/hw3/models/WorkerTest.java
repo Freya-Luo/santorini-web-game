@@ -69,6 +69,16 @@ public class WorkerTest {
             worker.checkIfWin();
             assertFalse(worker.getPlayer().isWinner());
         }
+
+        @Test
+        public void testCheckIsWinWithCompletedTower() {
+            for(int i = 0; i < 4; i++) {
+                worker.getCurPosition().getTower().addLevel();
+            }
+
+            worker.checkIfWin();
+            assertFalse(worker.getPlayer().isWinner());
+        }
     }
 
     public static class MovableAndBuildableCellsTest{
@@ -95,6 +105,11 @@ public class WorkerTest {
             for(int i = 0; i < 2; i++) {
                 board.getCell(1, 4).getTower().addLevel();
             }
+
+            // Set a level 3 tower - can set dome
+            for(int i = 0; i < 3; i++) {
+                board.getCell(2, 3).getTower().addLevel();
+            }
             // Set Dome - a complete tower, cannot build on
             for(int i = 0; i < 4; i++) {
                 board.getCell(3, 4).getTower().addLevel();
@@ -108,8 +123,8 @@ public class WorkerTest {
                 movableCellsPositions.add(new int[]{cell.getX(), cell.getY()});
             }
 
-            assertEquals(2, movableCellsPositions.size());
-            assertThat(movableCellsPositions, containsInAnyOrder(equalTo(new int[]{1, 3}), equalTo(new int[]{2, 3})));
+            assertEquals(1, movableCellsPositions.size());
+            assertThat(movableCellsPositions, containsInAnyOrder(equalTo(new int[]{1, 3})));
         }
 
         @Test

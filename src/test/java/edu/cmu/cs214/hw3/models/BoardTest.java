@@ -22,20 +22,26 @@ public class BoardTest {
     }
 
     @Test
-    public void getValidCell() {
+    public void testGetCellWithValidXY() {
         Cell cell = board.getCell(0, 4);
         assertThat(cell, instanceOf(Cell.class));
     }
 
     @Test
-    public void getInValidCell() {
+    public void testGetCellWithOneInvalid() {
         Cell cell = board.getCell(2, 5);
         assertNull(cell);
     }
 
     @Test
+    public void testGetCellWithBothInvalid() {
+        Cell cell = board.getCell(-1, -2);
+        assertNull(cell);
+    }
+
+    @Test
     public void testGetNeighbors() {
-        Cell cell = board.getCell(1, 4);
+        Cell cell = board.getCell(0, 4);
 
         List<Cell> neighbors = board.getNeighbors(cell);
         List<int[]> neighborsPositions = new ArrayList<>();
@@ -43,13 +49,11 @@ public class BoardTest {
             neighborsPositions.add(new int[]{n.getX(), n.getY()});
         }
 
-        assertEquals(5, neighborsPositions.size());
+        assertEquals(3, neighborsPositions.size());
         assertThat(neighborsPositions, containsInAnyOrder(
                 equalTo(new int[]{0, 3}),
-                equalTo(new int[]{0, 4}),
                 equalTo(new int[]{1, 3}),
-                equalTo(new int[]{2, 3}),
-                equalTo(new int[]{2, 4})
+                equalTo(new int[]{1, 4})
         ));
     }
 }

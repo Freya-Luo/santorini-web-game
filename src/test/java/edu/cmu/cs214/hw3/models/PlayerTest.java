@@ -29,6 +29,13 @@ public class PlayerTest {
     }
 
     @Test
+    public void testGetWorkerByType() {
+        Worker worker = player.getWorkerByType(WorkerType.TYPE_TEST);
+
+        assertNull(worker);
+    }
+
+    @Test
     public void testGetWorkers() {
         Worker workerB = player.getWorkerByType(WorkerType.TYPE_B);
         Worker[] workers = player.getAllWorkers();
@@ -36,4 +43,5 @@ public class PlayerTest {
         assertNotNull(workerB);
         assertEquals(workers[1], workerB);
     }
+
 }

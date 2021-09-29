@@ -19,7 +19,12 @@ public class Game {
         return players;
     }
 
-    // The game needs at least 2 players to start.
+    /**
+     * Set the two player for the game.
+     * @param playerA First player
+     * @param playerB Second player
+     * @return True if Two players are provided and can successfully be set; false otherwise.
+     */
     public boolean setPlayers(Player playerA, Player playerB) {
         if(playerA == null || playerB == null) {
             return false;
@@ -30,6 +35,11 @@ public class Game {
         return true;
     }
 
+    /**
+     * Get the player by his name.
+     * @param name Player's name
+     * @return The player with this name; null if name does not match.
+     */
     public Player getPlayerByName(String name) {
         for (Player player: players) {
             if(name.equals(player.getName())) {
@@ -46,7 +56,7 @@ public class Game {
     public void setCurrentPlayer(Player player) { currentPlayer = player; }
 
     /**
-     * Make 2 players to take turn after one set of valid moving and building.
+     * Make 2 players to take turns after a round of valid moving and building.
      */
     public void takeTurns() {
         if(currentPlayer == null) return;

@@ -41,6 +41,7 @@ public class MockGameLoader {
         return cellPos;
     }
 
+    // Load the mock rounds from the file
     public List<Action> loadMockRoundsFromFile() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         try {
@@ -59,6 +60,7 @@ public class MockGameLoader {
         }
     }
 
+    // Load the mock setup actions from file
     public List<Action> loadMockSetupFromFile() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         try {
@@ -77,6 +79,7 @@ public class MockGameLoader {
         }
     }
 
+    // Load the mock players names from file
     public String[] loadMockPlayerNamesFromFile() {
         for(Action setup: setupSteps) {
             if (names[0] == null) {

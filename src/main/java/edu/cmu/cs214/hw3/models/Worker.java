@@ -29,6 +29,7 @@ public class Worker {
 
     /**
      * If building fails, reset the workers to the previous position.
+     *
      * @apiNote In principle, worker cannot move back to the previous position.
      * However, this function is currently served to align with the logic of
      * the mock interactions between user and system.
@@ -99,7 +100,7 @@ public class Worker {
      * This function checks the eight neighbors of the worker's current position and
      * finds the possible cells that worker can build block/dome on.
      *
-     * A cell is unoccupied or its tower is incomplete is considered as buildable.
+     * A cell is unoccupied is considered as buildable.
      * @param neighbors The list of eight neighboring cells.
      * @return The list of possible cells that worker can build on.
      */
@@ -107,7 +108,7 @@ public class Worker {
         List<Cell> buildableCells = new ArrayList<>();
 
         for(Cell cell : neighbors) {
-            if (!cell.isOccupied() && !cell.getTower().isCompleted()) {
+            if (!cell.isOccupied()) {
                 buildableCells.add(cell);
             }
         }

@@ -7,6 +7,13 @@ public class Player {
     private final Worker[] workers;
     private boolean isWinner;
 
+    /**
+     * This constructor will check if the name is empty. If it is,
+     * then an error will be thrown to indicate that a player must
+     * have a valid name.
+     *
+     * @param name Name to identify the player
+     */
     public Player(String name) {
         if(name.equals("")) {
             throw new IllegalArgumentException("Player cannot have an empty name.");
@@ -20,6 +27,11 @@ public class Player {
         return name;
     }
 
+    /**
+     * Set a non-empty name to the player.
+     * @param newName New name
+     * @return True if name is valid and player's name is changed, false otherwise.
+     */
     public boolean setName(String newName) {
         if (!newName.equals("")) {
             name = newName;

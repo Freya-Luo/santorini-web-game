@@ -21,6 +21,7 @@ public class Board {
     }
 
     /**
+     * Get the cell at (x, y) on board.
      * @param x Row
      * @param y Column
      * @return Cell at position (x, y) in board; Null if index is out of boundary.
@@ -35,6 +36,7 @@ public class Board {
     /**
      * Get neighboring cells that are placed in eight directions. It only returns
      * cell that is on the board.
+     *
      * @param cell Center cell
      * @return A list of neighbors that are on the board.
      */

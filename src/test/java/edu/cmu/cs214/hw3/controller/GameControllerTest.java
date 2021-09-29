@@ -46,6 +46,14 @@ public class GameControllerTest {
     }
 
     @Test
+    public void testInitGameWithOutPlayers() {
+        boolean success = controller.initGame(null, null);
+
+        assertFalse(success);
+        assertThat(output.toString(), is("Sorry, game needs at least 2 players to start.\r\n"));
+    }
+
+    @Test
     public void testInitGameWithFewerPlayers() {
         boolean success = controller.initGame("freya", null);
 
@@ -89,13 +97,26 @@ public class GameControllerTest {
     public void testReadyGoWithNotAllWorkersSetup() {
         controller.initGame("freya", "yoyo");
         controller.pickStartingPosition("freya", WorkerType.TYPE_A, new int[]{3, 1});
-        controller.pickStartingPosition("freya", WorkerType.TYPE_B, new int[]{2, 2});
         controller.pickStartingPosition("yoyo", WorkerType.TYPE_B, new int[]{3, 3});
 
         boolean isReady = controller.readyGo();
 
         assertFalse(isReady);
         assertThat(output.toString(), is("Each player has to pick up starting positions for 2 workers.\r\n"));
+    }
+
+    @Test
+    public void testHitRoundWithGameNotRunning() {
+        Board board = game.getBoard();
+        controller.initGame("freya", "yoyo");
+        controller.pickStartingPosition("freya", WorkerType.TYPE_A, new int[]{3, 1});
+        controller.pickStartingPosition("freya", WorkerType.TYPE_B, new int[]{2, 2});
+        controller.pickStartingPosition("yoyo", WorkerType.TYPE_A, new int[]{1, 0});
+        controller.pickStartingPosition("yoyo", WorkerType.TYPE_B, new int[]{3, 3});
+
+        boolean success = controller.hitRound(WorkerType.TYPE_A, new int[]{4, 1}, new int[]{3, 2}, actionController);
+        assertFalse(success);
+        assertThat(output.toString(), is("Please wait, game is preparing...\r\n"));
     }
 
     @Test

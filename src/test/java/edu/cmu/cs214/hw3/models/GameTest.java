@@ -27,7 +27,13 @@ public class GameTest {
     }
 
     @Test
-    public void testSetInvalidPlayers() {
+    public void testSetWithTwoInvalidPlayers() {
+        boolean canSetPlayers = game.setPlayers(null, null);
+        assertFalse(canSetPlayers);
+    }
+
+    @Test
+    public void testSetWithOneInvalidPlayer() {
         boolean canSetPlayers = game.setPlayers(playerB, null);
         assertFalse(canSetPlayers);
     }
@@ -52,6 +58,14 @@ public class GameTest {
 
         game.takeTurns();
         assertEquals(playerA, game.getCurrentPlayer());
+    }
+
+    @Test
+    public void testTakeTurnWithoutCurrentPlayer() {
+        game.setPlayers(playerB, playerA);
+
+        game.takeTurns();
+        assertNull(game.getCurrentPlayer());
     }
 
     @Test
