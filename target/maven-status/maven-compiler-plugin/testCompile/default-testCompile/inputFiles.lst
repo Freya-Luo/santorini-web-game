@@ -1,10 +1,10 @@
-C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\BoardTest.java
-C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\WorkerTest.java
+C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\models\WorkerTest.java
 C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\SantoriniRoundsIT.java
-C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\CellTest.java
+C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\models\PlayerTest.java
 C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\SantoriniSetupIT.java
-C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\PlayerTest.java
-C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\TowerTest.java
+C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\models\CellTest.java
 C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\controller\ActionControllerTest.java
-C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\GameTest.java
+C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\models\TowerTest.java
+C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\models\BoardTest.java
 C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\controller\GameControllerTest.java
+C:\Users\y233l\Desktop\courses\17514\hw3\src\test\java\edu\cmu\cs214\hw3\models\GameTest.java

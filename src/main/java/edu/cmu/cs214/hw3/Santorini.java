@@ -36,7 +36,7 @@ public final class Santorini {
 
         // Players picking starting position for workers
         for(Action setup: mockSetup) {
-            boolean canPickPositions = GAME_CONTROLLER.pickStartingPositions(setup.getName(), setup.getType(), setup.getStartPos());
+            boolean canPickPositions = GAME_CONTROLLER.pickStartingPosition(setup.getName(), setup.getType(), setup.getStartPos());
             if(!canPickPositions) return;
         }
 

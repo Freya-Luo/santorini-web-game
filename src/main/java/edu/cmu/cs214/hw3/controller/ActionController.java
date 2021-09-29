@@ -44,7 +44,6 @@ public class ActionController {
             buildOn.getTower().addLevel();
             return true;
         }
-        worker.revertToPrePosition();
         return false;
     }
 }

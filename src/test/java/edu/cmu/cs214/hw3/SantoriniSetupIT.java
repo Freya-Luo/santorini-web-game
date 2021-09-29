@@ -71,7 +71,7 @@ public class SantoriniSetupIT {
         boolean canInit = gameController.initGame(names[0], names[1]);
         boolean canPickPositions = true;
         for(Action setup: wrongSetup) {
-            canPickPositions = gameController.pickStartingPositions(setup.getName(), setup.getType(), setup.getStartPos());
+            canPickPositions = gameController.pickStartingPosition(setup.getName(), setup.getType(), setup.getStartPos());
             if(!canPickPositions) break;
         }
 
@@ -91,7 +91,7 @@ public class SantoriniSetupIT {
         boolean canInit = gameController.initGame(names[0], names[1]);
         boolean canPickPositions = true;
         for(Action setup: wrongSetup) {
-            canPickPositions = gameController.pickStartingPositions(setup.getName(), setup.getType(), setup.getStartPos());
+            canPickPositions = gameController.pickStartingPosition(setup.getName(), setup.getType(), setup.getStartPos());
         }
         boolean isReady = gameController.readyGo();
 
@@ -112,7 +112,7 @@ public class SantoriniSetupIT {
         boolean canInit = gameController.initGame(names[0], names[1]);
         boolean canPickPositions = false;
         for(Action setup: correctSetup) {
-            canPickPositions = gameController.pickStartingPositions(setup.getName(), setup.getType(), setup.getStartPos());
+            canPickPositions = gameController.pickStartingPosition(setup.getName(), setup.getType(), setup.getStartPos());
             if(!canPickPositions) break;
         }
         boolean isReady = gameController.readyGo();

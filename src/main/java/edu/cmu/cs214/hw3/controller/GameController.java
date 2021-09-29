@@ -42,14 +42,13 @@ public class GameController {
     }
 
     /**
-     * Pick starting positions of 2 workers for each player and set the game.
-     * The worker can only stand on the unoccupied cell.
+     * Pick a starting position for worker, which can only stand on an unoccupied cell.
      * @param name Name of the current player
      * @param type Type of the current chosen worker
      * @param position Starting position for the current worker
      * @return True if worker can be placed on this position; false otherwise
      */
-    public boolean pickStartingPositions(String name, WorkerType type, int[] position) {
+    public boolean pickStartingPosition(String name, WorkerType type, int[] position) {
          boolean success;
 
          Player currentPlayer = game.getPlayerByName(name);
@@ -134,6 +133,7 @@ public class GameController {
             System.out.println("Sorry! You (" + game.getCurrentPlayer().getName() +
                     ") cannot build on this cell [" + buildOn[0] + ", "
                         + buildOn[1] + "].");
+            currentWorker.revertToPrePosition();
             isValidRound = false; // invalid round
             return false;
         }

@@ -49,7 +49,7 @@ public class SantoriniRoundsIT {
         setupLoader = new MockGameLoader(new File("mockSantorini/mockCorrectSetupTest.csv"));
         gameController.initGame(names[0], names[1]);
         for(Action setup: mockSetup) {
-            gameController.pickStartingPositions(setup.getName(), setup.getType(), setup.getStartPos());
+            gameController.pickStartingPosition(setup.getName(), setup.getType(), setup.getStartPos());
         }
         gameController.readyGo();
     }
