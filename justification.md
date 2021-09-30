@@ -7,9 +7,9 @@ Following the game rules, the models corresponding to the real-world objects are
 - 1 `Player` -> (has 2 ) `Worker`
 - 1 `Worker` -> (occupies 1) `Cell`
 
-Basically, almost all models above follow the "has-a" modeling technique. With the composition design principle, it is easy to add/change multiple behaviors with dependency injection (/using getters and setters) and also reduce different models coulping.
+Basically, almost all models above follow the "has-a" modeling technique. With the composition design principle, it is easy to add/change multiple behaviours with dependency injection (/using getters and setters) and also reduce different models coupling.
 
-In order to make connections between `Board`, `Player` and `Worker` and also to keep the information and status of players, a `Game` model would be helpful here. In fact, these logic could all be placed in `Board` class, but for the "single responsibility principle", the labor for each object should be divied into reasonable pieces. Then, 2 more associations added as:
+In order to make connections between `Board`, `Player` and `Worker` and also to keep the information and status of players, a `Game` model would be helpful here. In fact, these logic could all be placed in `Board` class, but for the "single responsibility principle", the labor of each object should be divided into reasonable pieces. Then, 2 more associations are added:
 
 - 1 `Game` -> (has 2 ) `Player`
 - 1 `Game` -> (has 1) `Board`
@@ -19,25 +19,25 @@ Since the actions that are related to `Block/Dome` are both "Building", this rul
 So, six models are sufficient to represent the whole Santorini game. In addition, their responsibilities are straightforward, the logic is stated as below:
 
 - `Game`: `phase` records the game status, which should be `PREPARING, RUNNING, DONE`; stored `currentPlayer`; `hasWinner` checks if a winner is generated
-- `Board`: `numOfRows` & `numOfCols` specify the size the board
-- `Cell`: `x` & `y` record its geographic posisiton, and `isOccupied` checks if it contains a `Worker` or a `Dome`
+- `Board`: `numOfRows` & `numOfCols` specify the size of the board
+- `Cell`: `x` & `y` record its geographic position, and `isOccupied` checks if it contains a `Worker` or a `Dome`
 - `Tower`: `level` records its current height, `hasDome` indicates if it's completed and `top` specifies the max level it can have
 - `Player`: `name` distinguishes 2 players and `isWinner` checks if this player wins the game
-- `Worker`: `type` distinguishes 2 workers a player has; stored its current and previous `curPosition & prePosition`
-  - `getMovableCells() & getBuildCells()` to give the possible move and build actions that are valid
+- `Worker`: `type` distinguishes 2 workers a player has; stores its current and previous location in `curPosition & prePosition`
+  - `getMovableCells() & getBuildCells()` give the possible move and build actions that are valid
 
 ### Design Pattern
 
-From the above logic, neither `is-a` relations nor overlapped logic exist among these models and associaitions. Besides, each model has their own inner states to keep track of and also has to interact with others.Thus, `Module Pattern` could be a good choice to design this game. Almost all attributes mentioned above should be labeled as `private` and each module has to expose some `public` methods for the interactions.
+From the above logic, neither `is-a` relation nor overlapped logic exists among these models and associaitions. Besides, each model has their own inner states to keep track of and also has to interact with others.Thus, `Module Pattern` could be a good choice to design this game. Almost all attributes mentioned above should be labeled as `private` and each module has to expose some `public` methods for the interactions.
 
 ### Logic and Data Flow
 
-For the purpose of maintainning low coupling and high cohesion, some conceputal classes are introduced - `GameController` and `ActionController`. Obviously, `GameController` should control the overall game status, players status and board information. And `ActionController` should focus on that 2 specific actions -- "Move" and "Build". With `Controllers`, future user interface and core logic will be decoupled from each other. Although they are coupled to the controllers now, it could be served as a mediator for the future reuse. In this way, this kind of coupling is less harmful.
+For the purpose of maintainning low coupling and high cohesion, some conceputal classes are introduced - `GameController` and `ActionController`. Obviously, `GameController` should control the overall game status, players status and board information. And `ActionController` should focus on that 2 specific actions -- "Move" and "Build". With `Controllers`, future user interface and core logic will be decoupled from each other. Although they are coupled to the controllers now, controllers could be served as mediators for the future reuse. In this way, this kind of coupling is less harmful.
 
 So, one possible design of data flow could be:
 
 - `GameController`: has 3 phases to control, which are corresponding to the `phase` in `Game`
-  - `initGame`: with a list of setup `Action` objects; initialize 2 players and all other modules; `phase` starts as `PREPARING`
+  - `initGame`: initialize 2 players and all other modules; `phase` starts as `PREPARING`
   - `pickStartingPosition`: each player pick starting positions for 2 workers
   - `readyGo`: check if all previous steps are correctly, if yes, then set `phase` to `RUNNING`
   - `hitRound`: players take turns to make worker move and build with the control of `ActionController`; once winner generates, `phase` changes to `DONE`
