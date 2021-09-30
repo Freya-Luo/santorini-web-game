@@ -32,7 +32,7 @@ From the above logic, neither `is-a` relations nor overlapped logic exist among 
 
 ### Logic and Data Flow
 
-For the purpose of maintainnig low coupling and high cohesion, some conceputal classes are introduced - `GameController` and `ActionController`. Obviously, `GameController` should control the overall game status, players status and board information. And `ActionController` should focus on that 2 specific actions -- "Move" and "Build". With `Controllers`, future user interface and core logic will be decoupled from each other. Although they are coupled to the controllers now, it could be served as a mediator for the future reuse. In this way, this kind of coupling is less harmful.
+For the purpose of maintainning low coupling and high cohesion, some conceputal classes are introduced - `GameController` and `ActionController`. Obviously, `GameController` should control the overall game status, players status and board information. And `ActionController` should focus on that 2 specific actions -- "Move" and "Build". With `Controllers`, future user interface and core logic will be decoupled from each other. Although they are coupled to the controllers now, it could be served as a mediator for the future reuse. In this way, this kind of coupling is less harmful.
 
 So, one possible design of data flow could be:
 
