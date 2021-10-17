@@ -35,8 +35,8 @@ public class WorkerTest {
 
         @Test
         public void testSetCurPosition() {
-            assertArrayEquals(worker.getCurPosition().getGeogPair(), target2.getGeogPair());
-            assertArrayEquals(worker.getPrePosition().getGeogPair(), target1.getGeogPair());
+            assertTrue(worker.getCurPosition().isEqual(target2));
+            assertTrue(worker.getPrePosition().isEqual(target1));
             assertFalse(worker.getPrePosition().isOccupied());
             assertTrue(worker.getCurPosition().isOccupied());
         }
@@ -45,7 +45,7 @@ public class WorkerTest {
         public void testRevertToPrePosition() {
             worker.revertToPrePosition();
 
-            assertArrayEquals(worker.getCurPosition().getGeogPair(), target1.getGeogPair());
+            assertTrue(worker.getPrePosition().isEqual(target1));
             assertTrue(worker.getCurPosition().isOccupied());
             assertFalse(target2.isOccupied());
         }
@@ -53,7 +53,7 @@ public class WorkerTest {
         @Test
         public void testCheckIsWinOnLevel3() {
             for(int i = 0; i < 3; i++) {
-                worker.getCurPosition().getTower().addLevel();
+                worker.getCurPosition().addLevel();
             }
 
             worker.checkIfWin();
@@ -63,7 +63,7 @@ public class WorkerTest {
         @Test
         public void testCheckIsWinBelowLevel3() {
             for(int i = 0; i < 2; i++) {
-                worker.getCurPosition().getTower().addLevel();
+                worker.getCurPosition().addLevel();
             }
 
             worker.checkIfWin();
@@ -73,7 +73,7 @@ public class WorkerTest {
         @Test
         public void testCheckIsWinWithCompletedTower() {
             for(int i = 0; i < 4; i++) {
-                worker.getCurPosition().getTower().addLevel();
+                worker.getCurPosition().addLevel();
             }
 
             worker.checkIfWin();
@@ -99,48 +99,21 @@ public class WorkerTest {
             board.getCell(3, 3).setOccupied();
 
             // Set a level 1 tower - can move up to
-            board.getCell(1, 3).getTower().addLevel();
+            board.getCell(1, 3).addLevel();
 
             // Set a level 2 tower - cannot move up to
             for(int i = 0; i < 2; i++) {
-                board.getCell(1, 4).getTower().addLevel();
+                board.getCell(1, 4).addLevel();
             }
 
             // Set a level 3 tower - can set dome
             for(int i = 0; i < 3; i++) {
-                board.getCell(2, 3).getTower().addLevel();
+                board.getCell(2, 3).addLevel();
             }
             // Set Dome - a complete tower, cannot build on
             for(int i = 0; i < 4; i++) {
-                board.getCell(3, 4).getTower().addLevel();
+                board.getCell(3, 4).addLevel();
             }
-        }
-        @Test
-        public void testGetMovableCells() {
-            List<Cell> movableCells = worker.getMovableCells(neighbors);
-            List<int[]> movableCellsPositions = new ArrayList<>();
-            for (Cell cell: movableCells) {
-                movableCellsPositions.add(new int[]{cell.getX(), cell.getY()});
-            }
-
-            assertEquals(1, movableCellsPositions.size());
-            assertThat(movableCellsPositions, containsInAnyOrder(equalTo(new int[]{1, 3})));
-        }
-
-        @Test
-        public void testGetBuildableCells() {
-            List<Cell> buildableCells = worker.getBuildableCells(neighbors);
-            List<int[]> buildableCellsPositions = new ArrayList<>();
-            for (Cell cell: buildableCells) {
-                buildableCellsPositions.add(new int[]{cell.getX(), cell.getY()});
-            }
-
-            assertEquals(3, buildableCellsPositions.size());
-            assertThat(buildableCellsPositions, containsInAnyOrder(
-                    equalTo(new int[]{1, 3}),
-                    equalTo(new int[]{2, 3}),
-                    equalTo(new int[]{1, 4})
-            ));
         }
     }
 }

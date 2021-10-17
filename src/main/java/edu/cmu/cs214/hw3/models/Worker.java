@@ -1,9 +1,6 @@
 package edu.cmu.cs214.hw3.models;
 import edu.cmu.cs214.hw3.utils.WorkerType;
 
-import java.util.ArrayList;
-import java.util.List;
-
 public class Worker {
     private final WorkerType type;
     private final Player player;
@@ -70,48 +67,8 @@ public class Worker {
      * Worker (Player) wins if he climbs up to a level-3 tower.
      */
     public void checkIfWin() {
-        if(!curPosition.getTower().isCompleted() && curPosition.getTower().getLevel() == Tower.TOP) {
+        if(!curPosition.isCompleted() && curPosition.getHeight() == 3) {
             player.setIsWinner();
         }
-    }
-
-
-    /**
-     * This function checks the eight neighbors of the worker's current position and
-     * finds the possible cells that worker can move to.
-     *
-     * A cell is unoccupied, or it's level is not 2 or more levels higher than worker's
-     * level is considered as movable.
-     * @param neighbors The list of eight neighboring cells.
-     * @return The list of possible cells that worker can move to.
-     */
-    public List<Cell> getMovableCells(List<Cell> neighbors) {
-        List<Cell> movableCells = new ArrayList<>();
-
-        for(Cell cell : neighbors) {
-            if (!cell.isOccupied() && cell.getTower().isClimbable(curPosition) ) {
-                movableCells.add(cell);
-            }
-        }
-        return movableCells;
-    }
-
-    /**
-     * This function checks the eight neighbors of the worker's current position and
-     * finds the possible cells that worker can build block/dome on.
-     *
-     * A cell is unoccupied is considered as buildable.
-     * @param neighbors The list of eight neighboring cells.
-     * @return The list of possible cells that worker can build on.
-     */
-    public List<Cell> getBuildableCells(List<Cell> neighbors) {
-        List<Cell> buildableCells = new ArrayList<>();
-
-        for(Cell cell : neighbors) {
-            if (!cell.isOccupied()) {
-                buildableCells.add(cell);
-            }
-        }
-        return buildableCells;
     }
 }

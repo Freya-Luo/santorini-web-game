@@ -4,7 +4,8 @@ import edu.cmu.cs214.hw3.utils.WorkerType;
 
 public class Player {
     private String name;
-    private final Worker[] workers;
+    private final Worker workerA;
+    private final Worker workerB;
     private boolean isWinner;
 
     /**
@@ -19,7 +20,8 @@ public class Player {
             throw new IllegalArgumentException("Player cannot have an empty name.");
         }
         this.name = name;
-        this.workers = new Worker[]{new Worker(WorkerType.TYPE_A, this), new Worker(WorkerType.TYPE_B, this)};
+        this.workerA = new Worker(WorkerType.TYPE_A, this);
+        this.workerB = new Worker(WorkerType.TYPE_B, this);
         this.isWinner = false;
     }
 
@@ -41,14 +43,24 @@ public class Player {
     }
 
     public Worker[] getAllWorkers() {
-        return workers;
+        return new Worker[] {workerA, workerB};
     }
 
     public Worker getWorkerByType(WorkerType type) {
-        for(Worker worker : workers) {
-            if(worker.getType() == type) {
-                return worker;
-            }
+       if (type == WorkerType.TYPE_A) {
+           return workerA;
+       } else if (type == WorkerType.TYPE_B) {
+           return workerB;
+       }
+       return null;
+    }
+
+    public Worker getWorkerByPosition(Cell pos) {
+        if (workerA.getCurPosition().isEqual(pos)) {
+            return workerA;
+        }
+        if (workerB.getCurPosition().isEqual(pos)) {
+            return workerB;
         }
         return null;
     }

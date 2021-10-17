@@ -1,5 +1,4 @@
 edu\cmu\cs214\hw3\models\Board.class
-edu\cmu\cs214\hw3\models\Tower.class
 edu\cmu\cs214\hw3\models\Player.class
 edu\cmu\cs214\hw3\utils\Action.class
 edu\cmu\cs214\hw3\models\Game.class

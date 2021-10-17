@@ -13,6 +13,7 @@ public class Board {
     public Board() {
         this.islandBoard = new Cell[ROWSNUMBER][COLSNUMBER];
 
+
         for(int i = 0; i < ROWSNUMBER; i++) {
             for(int j = 0; j < COLSNUMBER; j++) {
                 this.islandBoard[i][j] = new Cell(i, j);
@@ -54,4 +55,5 @@ public class Board {
         }
         return neighbors;
     }
+
 }
