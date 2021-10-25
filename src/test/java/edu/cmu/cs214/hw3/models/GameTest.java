@@ -23,16 +23,6 @@ public class GameTest {
 //        assertNull(player2);
 //    }
 
-    @Test
-    public void testTakeTurn() {
-        game.initGame("yoyo", "freya");
-
-        game.takeTurns();
-        assertEquals("freya", game.getCurrentPlayer().getName());
-
-        game.takeTurns();
-        assertEquals("yoyo", game.getCurrentPlayer().getName());
-    }
 
     @Test
     public void testTakeTurnWithoutCurrentPlayer() {

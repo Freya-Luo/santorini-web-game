@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GameController.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hw3</a> &gt; <a href="index.source.html" class="el_package">edu.cmu.cs214.hw3.controller</a> &gt; <span class="el_source">GameController.java</span></div><h1>GameController.java</h1><pre class="source lang-java linenums">package edu.cmu.cs214.hw3.controller;
+
+import edu.cmu.cs214.hw3.models.Game;
+import edu.cmu.cs214.hw3.models.Board;
+import edu.cmu.cs214.hw3.models.Player;
+import edu.cmu.cs214.hw3.models.Worker;
+
+import edu.cmu.cs214.hw3.utils.Phase;
+import edu.cmu.cs214.hw3.utils.WorkerType;
+
+public class GameController {
+    private final Game game;
+    private final Board board;
+<span class="fc" id="L14">    private Player playerA = null;</span>
+<span class="fc" id="L15">    private Player playerB = null;</span>
+<span class="fc" id="L16">    private boolean isValidRound = true;</span>
+
+<span class="fc" id="L18">    public GameController(Game game) {</span>
+<span class="fc" id="L19">        this.game = game;</span>
+<span class="fc" id="L20">        this.board = game.getBoard();</span>
+<span class="fc" id="L21">    }</span>
+
+    /**
+     * Initialize the game with two players and choose a starting player.
+     *
+     * @param nameA Name of the first player
+     * @param nameB Name of the second player
+     * @return True if game can be successfully initialized, false if players are missing
+     */
+    public boolean initGame(String nameA, String nameB) {
+<span class="fc bfc" id="L31" title="All 4 branches covered.">        if(nameA == null || nameB == null) {</span>
+<span class="fc" id="L32">            System.out.println(&quot;Sorry, game needs at least 2 players to start.&quot;);</span>
+<span class="fc" id="L33">            return false;</span>
+        }
+
+<span class="fc" id="L36">        playerA = new Player(nameA);</span>
+<span class="fc" id="L37">        playerB = new Player(nameB);</span>
+
+<span class="fc" id="L39">        game.setPlayers(playerA, playerB);</span>
+<span class="fc" id="L40">        game.setCurrentPlayer(playerA);</span>
+<span class="fc" id="L41">        return true;</span>
+    }
+
+    /**
+     * Pick a starting position for worker, which can only stand on an unoccupied cell.
+     *
+     * @param name Name of the current player
+     * @param type Type of the current chosen worker
+     * @param position Starting position for the current worker
+     * @return True if worker can be placed on this position; false otherwise
+     */
+    public boolean pickStartingPosition(String name, WorkerType type, int[] position) {
+         boolean success;
+
+<span class="fc" id="L55">         Player currentPlayer = game.getPlayerByName(name);</span>
+<span class="fc" id="L56">         game.setCurrentPlayer(currentPlayer);</span>
+<span class="fc" id="L57">         success = currentPlayer.getWorkerByType(type)</span>
+<span class="fc" id="L58">                        .setCurPosition(board.getCell(position[0], position[1]));</span>
+
+<span class="fc bfc" id="L60" title="All 2 branches covered.">         if(!success) {</span>
+<span class="fc" id="L61">             System.out.println(&quot;Sorry, worker cannot stands on an occupied space.&quot;);</span>
+<span class="fc" id="L62">             return false;</span>
+         }
+<span class="fc" id="L64">         return true;</span>
+    }
+
+    /**
+     * Checks if all 4 workers are correctly placed on the board.
+     * @return True if the game is ready to run, false otherwise.
+     */
+    public boolean readyGo() {
+<span class="fc" id="L72">        boolean isReady = true;</span>
+<span class="fc bfc" id="L73" title="All 2 branches covered.">        for(Worker worker : playerA.getAllWorkers()) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">            if(worker.getCurPosition() == null) {</span>
+<span class="fc" id="L75">                isReady = false;</span>
+<span class="fc" id="L76">                break;</span>
+            }
+        }
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        for(Worker worker : playerB.getAllWorkers()) {</span>
+<span class="fc bfc" id="L80" title="All 2 branches covered.">            if(worker.getCurPosition() == null) {</span>
+<span class="fc" id="L81">                isReady = false;</span>
+<span class="fc" id="L82">                break;</span>
+            }
+        }
+<span class="fc bfc" id="L85" title="All 2 branches covered.">        if(!isReady) {</span>
+<span class="fc" id="L86">            System.out.println(&quot;Each player has to pick up starting positions for 2 workers.&quot;);</span>
+        } else  {
+<span class="fc" id="L88">            game.setPhase(Phase.RUNNING);</span>
+        }
+<span class="fc" id="L90">        return isReady;</span>
+    }
+
+    /**
+     * Two players take turns to move worker and build tower.
+     * This method will reject invalid move or build. The next round can only be hit if
+     * last round of another player is valid.
+     *
+     * @param type Type of the current chosen worker
+     * @param moveTo Position the worker is going to move to
+     * @param buildOn Position the worker is going to build block/dome on
+     * @param actionController ActionController that executes the current action
+     * @return True if the game is finished and a winner is generated. False if this round
+     * has invalid action (either move or build) or no winner is generated.
+     */
+    public boolean hitRound(WorkerType type, int[] moveTo, int[] buildOn, ActionController actionController) {
+<span class="fc bfc" id="L106" title="All 2 branches covered.">        if(game.getPhase() != Phase.RUNNING) {</span>
+<span class="fc" id="L107">            System.out.println(&quot;Please wait, game is preparing...&quot;);</span>
+<span class="fc" id="L108">            return false;</span>
+        }
+
+        //If last round is valid, take turns
+<span class="fc bfc" id="L112" title="All 2 branches covered.">        if(isValidRound) {</span>
+<span class="fc" id="L113">            game.takeTurns();</span>
+        }
+
+<span class="fc" id="L116">        Worker currentWorker = game.getCurrentPlayer().getWorkerByType(type);</span>
+<span class="fc" id="L117">        boolean moveSuccess = actionController.chooseMove(currentWorker, board.getCell(moveTo[0], moveTo[1]));</span>
+        // If moving fails, choose another cell to move to
+<span class="fc bfc" id="L119" title="All 2 branches covered.">        if(!moveSuccess) {</span>
+<span class="fc" id="L120">            System.out.println(&quot;Oops! You (&quot; + game.getCurrentPlayer().getName() +</span>
+                    &quot;) cannot move to this cell [&quot; + moveTo[0] + &quot;, &quot; +
+                    moveTo[1] +&quot;].&quot;);
+<span class="fc" id="L123">            isValidRound = false; // invalid round</span>
+<span class="fc" id="L124">            return false;</span>
+        }
+
+        // If worker is at the top of 3-level tower, he wins!
+        // Set current player to be a winner
+<span class="fc" id="L129">        currentWorker.checkIfWin();</span>
+<span class="fc bfc" id="L130" title="All 2 branches covered.">        if (game.hasWinner()) {</span>
+<span class="fc" id="L131">            System.out.println(&quot;Congratulation! &quot; + game.getCurrentPlayer().getName() + &quot; is the winner!&quot;);</span>
+<span class="fc" id="L132">            game.setPhase(Phase.DONE);</span>
+<span class="fc" id="L133">            return true;</span>
+        }
+
+        // The precondition of building is worker moves successfully
+<span class="fc" id="L137">        boolean buildSuccess = actionController.chooseBuild(currentWorker, board.getCell(buildOn[0], buildOn[1]));</span>
+<span class="fc bfc" id="L138" title="All 2 branches covered.">        if(!buildSuccess) {</span>
+<span class="fc" id="L139">            System.out.println(&quot;Sorry! You (&quot; + game.getCurrentPlayer().getName() +</span>
+                    &quot;) cannot build on this cell [&quot; + buildOn[0] + &quot;, &quot;
+                        + buildOn[1] + &quot;].&quot;);
+<span class="fc" id="L142">            currentWorker.revertToPrePosition();</span>
+<span class="fc" id="L143">            isValidRound = false; // invalid round</span>
+<span class="fc" id="L144">            return false;</span>
+        }
+        // Mark this round is valid
+<span class="fc" id="L147">        isValidRound = true;</span>
+<span class="fc" id="L148">        return false;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

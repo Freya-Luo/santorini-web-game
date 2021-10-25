@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Game.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hw3</a> &gt; <a href="index.source.html" class="el_package">edu.cmu.cs214.hw3.models</a> &gt; <span class="el_source">Game.java</span></div><h1>Game.java</h1><pre class="source lang-java linenums">package edu.cmu.cs214.hw3.models;
+
+import edu.cmu.cs214.hw3.utils.Phase;
+import edu.cmu.cs214.hw3.utils.WorkerType;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Game {
+    private final Board board;
+    private Player playerA;
+    private Player playerB;
+    private Player currentPlayer;
+    private Phase phase;
+    //private boolean isValidRound = true;
+
+<span class="fc" id="L17">    public Game() {</span>
+<span class="fc" id="L18">        this.board = new Board();</span>
+<span class="fc" id="L19">        this.phase = Phase.PREPARING;</span>
+<span class="fc" id="L20">        this.currentPlayer = null;</span>
+<span class="fc" id="L21">    }</span>
+
+    public Player getCurrentPlayer() {
+<span class="fc" id="L24">        return currentPlayer;</span>
+    }
+
+<span class="fc" id="L27">    public void setCurrentPlayer(Player player) { currentPlayer = player; }</span>
+
+    /**
+     * Get the player by his name.
+     * @param name Player's name
+     * @return The player with this name; null if name does not match.
+     */
+    public Player getPlayerByName(String name) {
+
+<span class="nc bnc" id="L36" title="All 2 branches missed.">            if(name.equals(playerA.getName())) {</span>
+<span class="nc" id="L37">                return playerA;</span>
+<span class="nc bnc" id="L38" title="All 2 branches missed.">            } else if (name.equals(playerB.getName())) {</span>
+<span class="nc" id="L39">                return playerB;</span>
+            }
+
+<span class="nc" id="L42">        return null;</span>
+    }
+
+    /**
+     * Make 2 players to take turns after a round of valid moving and building.
+     */
+    public void takeTurns() {
+<span class="fc bfc" id="L49" title="All 2 branches covered.">        if(currentPlayer == null) return;</span>
+
+<span class="fc bfc" id="L51" title="All 2 branches covered.">        currentPlayer = (currentPlayer == playerA) ? playerB : playerA;</span>
+<span class="fc" id="L52">    }</span>
+
+    public Board getBoard() {
+<span class="nc" id="L55">        return board;</span>
+    }
+
+    public Phase getPhase() {
+<span class="nc" id="L59">        return phase;</span>
+    }
+
+    public void setPhase(Phase newPhase) {
+<span class="nc" id="L63">        phase = newPhase;</span>
+<span class="nc" id="L64">    }</span>
+
+    /**
+     * Check if the winner is generated.
+     * @return Game is finished if return true, false otherwise.
+     */
+    public boolean hasWinner() {
+<span class="nc bnc" id="L71" title="All 4 branches missed.">        if(playerA.isWinner() || playerB.isWinner()) {</span>
+<span class="nc" id="L72">            return true;</span>
+        }
+<span class="nc" id="L74">        return false;</span>
+    }
+
+    /**
+     * Initialize the game with two players and choose a starting player.
+     *
+     * @param nameA Name of the first player
+     * @param nameB Name of the second player
+     * @return True if game can be successfully initialized, false if players are missing
+     */
+    public boolean initGame(String nameA, String nameB) {
+<span class="pc bpc" id="L85" title="2 of 4 branches missed.">        if(nameA == null || nameB == null) {</span>
+<span class="nc" id="L86">            System.out.println(&quot;Sorry, game needs at least 2 players to start.&quot;);</span>
+<span class="nc" id="L87">            return false;</span>
+        }
+
+<span class="fc" id="L90">        playerA = new Player(nameA);</span>
+<span class="fc" id="L91">        playerB = new Player(nameB);</span>
+
+<span class="fc" id="L93">        setCurrentPlayer(playerA);</span>
+<span class="fc" id="L94">        return true;</span>
+    }
+
+    /**
+     * Pick a starting position for worker, which can only stand on an unoccupied cell.
+     *
+     * @param type Type of the current chosen worker
+     * @param position Starting position for the current worker
+     * @return True if worker can be placed on this position; false otherwise
+     */
+    public boolean pickStartingPosition(WorkerType type, int[] position) {
+        boolean success;
+
+<span class="nc" id="L107">        Player currentPlayer = getCurrentPlayer();</span>
+<span class="nc" id="L108">        success = currentPlayer.getWorkerByType(type)</span>
+<span class="nc" id="L109">                .setCurPosition(board.getCell(position[0], position[1]));</span>
+
+<span class="nc bnc" id="L111" title="All 2 branches missed.">        if(!success) {</span>
+<span class="nc" id="L112">            System.out.println(&quot;Sorry, worker cannot stands on an occupied space.&quot;);</span>
+<span class="nc" id="L113">            return false;</span>
+        }
+
+<span class="nc" id="L116">        boolean setBothWorkers = true;</span>
+<span class="nc bnc" id="L117" title="All 2 branches missed.">        for(Worker worker: currentPlayer.getAllWorkers()) {</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">            if (worker.getCurPosition() == null) {</span>
+<span class="nc" id="L119">                setBothWorkers = false;</span>
+            }
+        }
+<span class="nc bnc" id="L122" title="All 2 branches missed.">        if (setBothWorkers) takeTurns();</span>
+<span class="nc" id="L123">        return true;</span>
+    }
+
+
+    /**
+     * Two players take turns to move worker and build tower.
+     * This method will reject invalid move or build. The next round can only be hit if
+     * last round of another player is valid.
+     *
+     * @param type Type of the current chosen worker
+     * @param movePos Position the worker is going to move to
+     * @param buildPos Position the worker is going to build block/dome on
+     * @return True if the game is finished and a winner is generated. False if this round
+     * has invalid action (either move or build) or no winner is generated.
+     */
+    public boolean hitRound(WorkerType type, int[] movePos, int[] buildPos) {
+
+<span class="nc" id="L140">        boolean moveSuccess = canMoveWorker(type, movePos);</span>
+<span class="nc bnc" id="L141" title="All 2 branches missed.">        if(!moveSuccess) {</span>
+            // If moving fails, choose another cell to move to
+<span class="nc" id="L143">            System.out.println(&quot;Oops! You (&quot; + getCurrentPlayer().getName() +</span>
+                    &quot;) cannot move to this cell [&quot; + movePos[0] + &quot;, &quot; +
+                    movePos[1] +&quot;].&quot;);
+<span class="nc" id="L146">            return false;</span>
+        }
+
+        // If worker is at the top of 3-level tower, he wins!
+        // Set current player to be a winner
+<span class="nc" id="L151">        currentPlayer.getWorkerByType(type).checkIfWin();</span>
+<span class="nc bnc" id="L152" title="All 2 branches missed.">        if (hasWinner()) {</span>
+<span class="nc" id="L153">            System.out.println(&quot;Congratulation! &quot; + getCurrentPlayer().getName() + &quot; is the winner!&quot;);</span>
+<span class="nc" id="L154">            setPhase(Phase.DONE);</span>
+<span class="nc" id="L155">            return true;</span>
+        }
+
+<span class="nc" id="L158">        boolean canBuild = canWorkerBuild(type, buildPos);</span>
+<span class="nc bnc" id="L159" title="All 2 branches missed.">        if(!canBuild) {</span>
+            // If moving fails, choose another cell to move to
+<span class="nc" id="L161">            System.out.println(&quot;Sorry! You (&quot; + getCurrentPlayer().getName() +</span>
+                    &quot;) cannot build on this cell [&quot; + buildPos[0] + &quot;, &quot;
+                    + buildPos[1] + &quot;].&quot;);
+<span class="nc" id="L164">            return false;</span>
+        }
+
+<span class="nc" id="L167">        takeTurns();</span>
+<span class="nc" id="L168">        return true;</span>
+    }
+
+    /**
+     * This function checks the eight neighbors of the worker's current position and
+     * finds the possible cells that worker can move to.
+     *
+     * A cell is unoccupied, or it's level is not 2 or more levels higher than worker's
+     * level is considered as movable.
+     * @param neighbors The list of eight neighboring cells.
+     * @return The list of possible cells that worker can move to.
+     */
+    private List&lt;Cell&gt; getMovableCells(Cell workerPos, List&lt;Cell&gt; neighbors) {
+<span class="nc" id="L181">        List&lt;Cell&gt; movableCells = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L183" title="All 2 branches missed.">        for(Cell cell : neighbors) {</span>
+<span class="nc bnc" id="L184" title="All 4 branches missed.">            if (!cell.isOccupied() &amp;&amp; cell.isClimbable(workerPos) ) {</span>
+<span class="nc" id="L185">                movableCells.add(cell);</span>
+            }
+<span class="nc" id="L187">        }</span>
+<span class="nc" id="L188">        return movableCells;</span>
+    }
+
+    public boolean canMoveWorker(WorkerType type, int[] movePos) {
+<span class="nc" id="L192">        Cell moveTo = board.getCell(movePos[0], movePos[1]);</span>
+<span class="nc" id="L193">        Cell workerPos = currentPlayer.getWorkerByType(type).getCurPosition();</span>
+
+<span class="nc" id="L195">        List&lt;Cell&gt; neighbors = board.getNeighbors(workerPos);</span>
+<span class="nc" id="L196">        List&lt;Cell&gt; movableCells = getMovableCells(workerPos, neighbors);</span>
+
+<span class="nc bnc" id="L198" title="All 2 branches missed.">        if(!movableCells.contains(moveTo)) return false;</span>
+
+<span class="nc" id="L200">        currentPlayer.getWorkerByType(type).setCurPosition(moveTo);</span>
+<span class="nc" id="L201">        return true;</span>
+    }
+
+    /**
+     * This function checks the eight neighbors of the worker's current position and
+     * finds the possible cells that worker can build block/dome on.
+     *
+     * A cell is unoccupied is considered as buildable.
+     * @param neighbors The list of eight neighboring cells.
+     * @return The list of possible cells that worker can build on.
+     */
+    private List&lt;Cell&gt; getBuildableCells(List&lt;Cell&gt; neighbors) {
+<span class="nc" id="L213">        List&lt;Cell&gt; buildableCells = new ArrayList&lt;&gt;();</span>
+
+<span class="nc bnc" id="L215" title="All 2 branches missed.">        for(Cell cell : neighbors) {</span>
+<span class="nc bnc" id="L216" title="All 2 branches missed.">            if (!cell.isOccupied()) {</span>
+<span class="nc" id="L217">                buildableCells.add(cell);</span>
+            }
+<span class="nc" id="L219">        }</span>
+<span class="nc" id="L220">        return buildableCells;</span>
+    }
+
+    /**
+     * The precondition of building is worker moves successfully
+     * @param type
+     * @param buildPos
+     * @return
+     */
+    public boolean canWorkerBuild(WorkerType type, int[] buildPos) {
+<span class="nc" id="L230">        Cell buildOn = board.getCell(buildPos[0], buildPos[1]);</span>
+<span class="nc" id="L231">        Worker currentWorker = currentPlayer.getWorkerByType(type);</span>
+
+<span class="nc" id="L233">        List&lt;Cell&gt; neighbors = board.getNeighbors(currentWorker.getCurPosition());</span>
+<span class="nc" id="L234">        List&lt;Cell&gt; buildableCells = getBuildableCells(neighbors);</span>
+<span class="nc bnc" id="L235" title="All 2 branches missed.">        if(!buildableCells.contains(buildOn)){</span>
+<span class="nc" id="L236">            currentWorker.revertToPrePosition();</span>
+<span class="nc" id="L237">            return false;</span>
+        }
+<span class="nc" id="L239">        buildOn.addLevel();</span>
+<span class="nc" id="L240">        return true;</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

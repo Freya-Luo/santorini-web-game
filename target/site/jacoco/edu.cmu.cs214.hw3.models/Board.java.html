@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Board.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hw3</a> &gt; <a href="index.source.html" class="el_package">edu.cmu.cs214.hw3.models</a> &gt; <span class="el_source">Board.java</span></div><h1>Board.java</h1><pre class="source lang-java linenums">package edu.cmu.cs214.hw3.models;
+
+import edu.cmu.cs214.hw3.utils.Direction;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class Board {
+    private static final int ROWSNUMBER = 5;
+    private static final int COLSNUMBER = 5;
+    private final Cell[][] islandBoard;
+
+<span class="fc" id="L13">    public Board() {</span>
+<span class="fc" id="L14">        this.islandBoard = new Cell[ROWSNUMBER][COLSNUMBER];</span>
+
+<span class="fc bfc" id="L16" title="All 2 branches covered.">        for(int i = 0; i &lt; ROWSNUMBER; i++) {</span>
+<span class="fc bfc" id="L17" title="All 2 branches covered.">            for(int j = 0; j &lt; COLSNUMBER; j++) {</span>
+<span class="fc" id="L18">                this.islandBoard[i][j] = new Cell(i, j);</span>
+            }
+        }
+<span class="fc" id="L21">    }</span>
+
+    /**
+     * Get the cell at (x, y) on board.
+     * @param x Row
+     * @param y Column
+     * @return Cell at position (x, y) in board; Null if index is out of boundary.
+     */
+    public Cell getCell(int x, int y) {
+<span class="pc bpc" id="L30" title="1 of 8 branches missed.">        if(0 &lt;= x &amp;&amp; x &lt; ROWSNUMBER &amp;&amp; 0 &lt;= y &amp;&amp; y &lt; COLSNUMBER) {</span>
+<span class="fc" id="L31">            return islandBoard[x][y];</span>
+        }
+<span class="fc" id="L33">        return null;</span>
+    }
+
+    /**
+     * Get neighboring cells that are placed in eight directions. It only returns
+     * cell that is on the board.
+     *
+     * @param cell Center cell
+     * @return A list of neighbors that are on the board.
+     */
+    public List&lt;Cell&gt; getNeighbors(Cell cell) {
+<span class="fc" id="L44">        List&lt;Cell&gt; neighbors = new ArrayList&lt;&gt;();</span>
+
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        for(Direction dir: Direction.values()) {</span>
+<span class="fc" id="L47">            int nX = cell.getX() + dir.getDir()[0];</span>
+<span class="fc" id="L48">            int nY = cell.getY() + dir.getDir()[1];</span>
+
+<span class="fc" id="L50">            Cell neighbor = getCell(nX, nY);</span>
+<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (neighbor != null) {</span>
+<span class="fc" id="L52">                neighbors.add(neighbor);</span>
+            }
+        }
+<span class="fc" id="L55">        return neighbors;</span>
+    }
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>

@@ -5,13 +5,11 @@ public class Worker {
     private final WorkerType type;
     private final Player player;
     private Cell curPosition;
-    private Cell prePosition;
 
     public Worker(WorkerType type, Player player) {
         this.type = type;
         this.player = player;
         this.curPosition = null;
-        this.prePosition = null;
     }
 
     public WorkerType getType() {
@@ -20,22 +18,6 @@ public class Worker {
 
     public Cell getCurPosition() {
         return curPosition;
-    }
-
-    public Cell getPrePosition() { return prePosition; }
-
-    /**
-     * If building fails, reset the workers to the previous position.
-     *
-     * @apiNote In principle, worker cannot move back to the previous position.
-     * However, this function is currently served to align with the logic of
-     * the mock interactions between user and system.
-     * It should be reconfigured/removed when GUI interface is integrated.
-     */
-    public void revertToPrePosition() {
-        curPosition.setFree();
-        curPosition = prePosition;
-        curPosition.setOccupied();
     }
 
     /**
@@ -51,8 +33,7 @@ public class Worker {
         }
         // Set the starting position.
         if (curPosition != null) {
-            prePosition = curPosition;
-            prePosition.setFree();
+            curPosition.setFree();
         }
         curPosition = newPosition;
         curPosition.setOccupied();
@@ -67,6 +48,8 @@ public class Worker {
      * Worker (Player) wins if he climbs up to a level-3 tower.
      */
     public void checkIfWin() {
+        // If the player wins by god power
+        if (getPlayer().getIsWinner()) return;
         if(!curPosition.isCompleted() && curPosition.getHeight() == 3) {
             player.setIsWinner();
         }

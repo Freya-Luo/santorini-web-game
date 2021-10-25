@@ -1,5 +1,6 @@
 package edu.cmu.cs214.hw3.models;
 
+import edu.cmu.cs214.hw3.cards.God;
 import edu.cmu.cs214.hw3.utils.WorkerType;
 
 public class Player {
@@ -7,6 +8,7 @@ public class Player {
     private final Worker workerA;
     private final Worker workerB;
     private boolean isWinner;
+    private God god;
 
     /**
      * This constructor will check if the name is empty. If it is,
@@ -27,6 +29,12 @@ public class Player {
 
     public String getName() {
         return name;
+    }
+
+    public God getGod() { return this.god; }
+
+    public void setGod(God god) {
+        this.god = god;
     }
 
     /**
@@ -65,9 +73,7 @@ public class Player {
         return null;
     }
 
-    public boolean isWinner() {
-        return isWinner;
-    }
+    public boolean getIsWinner() {return isWinner;}
 
     public void setIsWinner() {
         isWinner = true;
