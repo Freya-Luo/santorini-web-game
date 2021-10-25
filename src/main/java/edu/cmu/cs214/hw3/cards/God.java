@@ -8,18 +8,31 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class God {
-    protected boolean powerToOpponent = false;
+    protected boolean powerToMove = false;
+    protected boolean powerToBuild = false;
 
-    public void setUsePowerToOpponent() {
-        powerToOpponent = true;
+    public void setUsePowerToMove() {
+        powerToMove = true;
     }
 
-    public void setNotUsePowerToOpponent() {
-        powerToOpponent = false;
+    public void setNotUsePowerToMove() {
+        powerToMove = false;
     }
 
-    public boolean getPowerToOpponent() {
-        return powerToOpponent;
+    public boolean ifUsePowerToMove() {
+        return powerToMove;
+    }
+
+    public void setUsePowerToBuild() {
+        powerToBuild = true;
+    }
+
+    public void setNotUsePowerToBuild() {
+        powerToBuild = false;
+    }
+
+    public boolean ifUsePowerToBuild() {
+        return powerToBuild;
     }
 
     /**
@@ -72,8 +85,11 @@ public abstract class God {
         buildOn.addLevel();
     }
 
-    public List<Cell> applyOpponentPower(List<Cell> choosableCells, Worker worker) {
-        return choosableCells;
+    public List<Cell> applyOpponentPowerToMove(List<Cell> movableCells, Worker worker) {
+        return movableCells;
     }
 
+    public List<Cell> applyOpponentPowerToBuild(List<Cell> buildableCells) {
+        return buildableCells;
+    }
 }

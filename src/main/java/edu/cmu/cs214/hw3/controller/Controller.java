@@ -147,7 +147,7 @@ public class Controller {
         God opponentGod = GAME.getNextPlayer().getGod();
         List<Cell> movableCells = currentGod.getMovableCells(worker, GAME);
         // Apply opponent's power from last round
-        movableCells = opponentGod.applyOpponentPower(movableCells, worker);
+        movableCells = opponentGod.applyOpponentPowerToMove(movableCells, worker);
 
         if(!movableCells.contains(moveTo)) return false;
 
@@ -166,8 +166,11 @@ public class Controller {
         Worker currentWorker = GAME.getCurrentPlayer().getWorkerByType(type);
 
         God currentGod = GAME.getCurrentPlayer().getGod();
+        God opponentGod = GAME.getNextPlayer().getGod();
         List<Cell> neighbors = GAME.getBoard().getNeighbors(currentWorker.getCurPosition());
         List<Cell> buildableCells = currentGod.getBuildableCells(neighbors);
+        // Apply opponent's power from last round
+        buildableCells = opponentGod.applyOpponentPowerToBuild(buildableCells);
 
         if(!buildableCells.contains(buildOn)){
             GAME.getNextPlayer().setIsWinner();
