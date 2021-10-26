@@ -49,7 +49,7 @@ public class Worker {
      */
     public void checkIfWin() {
         // If the player wins by god power
-        if (getPlayer().getIsWinner()) return;
+        if (getPlayer().isWinner()) return;
         if(!curPosition.isCompleted() && curPosition.getHeight() == 3) {
             player.setIsWinner();
         }

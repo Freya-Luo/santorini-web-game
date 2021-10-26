@@ -13,12 +13,13 @@ public class Board {
 <span class="fc" id="L13">    public Board() {</span>
 <span class="fc" id="L14">        this.islandBoard = new Cell[ROWSNUMBER][COLSNUMBER];</span>
 
-<span class="fc bfc" id="L16" title="All 2 branches covered.">        for(int i = 0; i &lt; ROWSNUMBER; i++) {</span>
-<span class="fc bfc" id="L17" title="All 2 branches covered.">            for(int j = 0; j &lt; COLSNUMBER; j++) {</span>
-<span class="fc" id="L18">                this.islandBoard[i][j] = new Cell(i, j);</span>
+
+<span class="fc bfc" id="L17" title="All 2 branches covered.">        for(int i = 0; i &lt; ROWSNUMBER; i++) {</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">            for(int j = 0; j &lt; COLSNUMBER; j++) {</span>
+<span class="fc" id="L19">                this.islandBoard[i][j] = new Cell(i, j);</span>
             }
         }
-<span class="fc" id="L21">    }</span>
+<span class="fc" id="L22">    }</span>
 
     /**
      * Get the cell at (x, y) on board.
@@ -27,10 +28,10 @@ public class Board {
      * @return Cell at position (x, y) in board; Null if index is out of boundary.
      */
     public Cell getCell(int x, int y) {
-<span class="pc bpc" id="L30" title="1 of 8 branches missed.">        if(0 &lt;= x &amp;&amp; x &lt; ROWSNUMBER &amp;&amp; 0 &lt;= y &amp;&amp; y &lt; COLSNUMBER) {</span>
-<span class="fc" id="L31">            return islandBoard[x][y];</span>
+<span class="pc bpc" id="L31" title="2 of 8 branches missed.">        if(0 &lt;= x &amp;&amp; x &lt; ROWSNUMBER &amp;&amp; 0 &lt;= y &amp;&amp; y &lt; COLSNUMBER) {</span>
+<span class="fc" id="L32">            return islandBoard[x][y];</span>
         }
-<span class="fc" id="L33">        return null;</span>
+<span class="fc" id="L34">        return null;</span>
     }
 
     /**
@@ -41,18 +42,18 @@ public class Board {
      * @return A list of neighbors that are on the board.
      */
     public List&lt;Cell&gt; getNeighbors(Cell cell) {
-<span class="fc" id="L44">        List&lt;Cell&gt; neighbors = new ArrayList&lt;&gt;();</span>
+<span class="fc" id="L45">        List&lt;Cell&gt; neighbors = new ArrayList&lt;&gt;();</span>
 
-<span class="fc bfc" id="L46" title="All 2 branches covered.">        for(Direction dir: Direction.values()) {</span>
-<span class="fc" id="L47">            int nX = cell.getX() + dir.getDir()[0];</span>
-<span class="fc" id="L48">            int nY = cell.getY() + dir.getDir()[1];</span>
+<span class="fc bfc" id="L47" title="All 2 branches covered.">        for(Direction dir: Direction.values()) {</span>
+<span class="fc" id="L48">            int nX = cell.getX() + dir.getDir()[0];</span>
+<span class="fc" id="L49">            int nY = cell.getY() + dir.getDir()[1];</span>
 
-<span class="fc" id="L50">            Cell neighbor = getCell(nX, nY);</span>
-<span class="fc bfc" id="L51" title="All 2 branches covered.">            if (neighbor != null) {</span>
-<span class="fc" id="L52">                neighbors.add(neighbor);</span>
+<span class="fc" id="L51">            Cell neighbor = getCell(nX, nY);</span>
+<span class="fc bfc" id="L52" title="All 2 branches covered.">            if (neighbor != null) {</span>
+<span class="fc" id="L53">                neighbors.add(neighbor);</span>
             }
         }
-<span class="fc" id="L55">        return neighbors;</span>
+<span class="fc" id="L56">        return neighbors;</span>
     }
 
 }

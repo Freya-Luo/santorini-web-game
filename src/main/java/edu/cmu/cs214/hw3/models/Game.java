@@ -6,6 +6,7 @@ public class Game {
     private Player playerA;
     private Player playerB;
     private Player currentPlayer;
+    private boolean isRunning = false;
 
     public Game() {
         this.board = new Board();
@@ -67,7 +68,21 @@ public class Game {
      *
      * @return Game is finished if return true, false otherwise.
      */
-    public boolean hasWinner() {
-        return playerA.getIsWinner() || playerB.getIsWinner();
+    public Player getWinner() {
+        if (playerA.isWinner())
+            return playerA;
+        else if (playerB.isWinner())
+            return playerB;
+        return null;
     }
+
+    public void setIsRunning() {
+        this.isRunning = true;
+    }
+
+    public void setIsFinished() {
+        this.isRunning = false;
+    }
+
+    public boolean getIsRunning() { return this.isRunning; }
 }

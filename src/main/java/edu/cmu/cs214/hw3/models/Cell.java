@@ -6,6 +6,10 @@ public class Cell {
     private boolean isOccupied;
     private int height;
     private int maxHeight = 4;
+    //private boolean preferable = false;
+    private String avatar;
+    private String link;
+    private String cssClass;
 
     public Cell(int x, int y) {
         this.x = x;
@@ -39,9 +43,6 @@ public class Cell {
         return this.getX() == that.getX()
                 && this.getY() == that.getY();
     }
-//    public int[] getGeogPair() {
-//        return new int[]{x, y};
-//    }
 
     public int getHeight() {
         return height;
@@ -78,4 +79,12 @@ public class Cell {
         if(isCompleted()) return false;
         return height - from.getHeight() <= 1;
     }
+
+    public void setMetadata(String avatar, String link, String cssClass) {
+        this.avatar = avatar;
+        this.link = link;
+        this.cssClass = cssClass;
+    }
+
+    public String getLink() {return this.link;}
 }

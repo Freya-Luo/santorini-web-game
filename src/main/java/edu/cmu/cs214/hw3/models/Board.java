@@ -34,6 +34,9 @@ public class Board {
         return null;
     }
 
+    public Cell[][] getAllCells() {
+        return islandBoard;
+    }
     /**
      * Get neighboring cells that are placed in eight directions. It only returns
      * cell that is on the board.

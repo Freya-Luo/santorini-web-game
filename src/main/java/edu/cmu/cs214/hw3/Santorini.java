@@ -1,7 +1,5 @@
 package edu.cmu.cs214.hw3;
 
-import edu.cmu.cs214.hw3.cards.Athena;
-import edu.cmu.cs214.hw3.cards.God;
 import edu.cmu.cs214.hw3.controller.Controller;
 import edu.cmu.cs214.hw3.models.Game;
 import edu.cmu.cs214.hw3.utils.Action;
@@ -11,15 +9,33 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-public final class Santorini {
+import com.github.jknack.handlebars.Handlebars;
+import com.github.jknack.handlebars.Template;
+import fi.iki.elonen.NanoHTTPD;
+
+/**
+ * The URLs in this game are set as following:
+ * 1) "/initGame?nameA=&nameB=" => initGame(nameA, nameB)
+ * 2) "/chooseGod?godA=&godB=" => chooseGod(godA, godB)
+ * 3) "/pickStartingPosition?type=&x=&y=" => type-> WorkerType, x, y -> int[] pos => pickStartingPosition(type, pos)
+ * 4) "/round/move?type=&x=&y=" => type-> WorkerType, x, y -> int[] pos
+ *     => hitRound(actionType, type, int[] moveTo)
+ * 5) "/hasWinner" => getWinner()
+ * 6) if not, redirect to "/round/build?type=&x=&y=" => type-> WorkerType, x, y -> int[] pos
+ *     => hitRound(actionType, type, int[] buildOn)
+ */
+public final class Santorini{
     // Game setup
     private static final Game SANTORINI = new Game();
     private static final Controller controller = new Controller(SANTORINI);
 
-    private Santorini() {
-        // Disable instantiating this class.
-        throw new UnsupportedOperationException();
-    }
+//    public static void main(String[] args) {
+//        try {
+//            new App();
+//        } catch (IOException ioe) {
+//            System.err.println("Couldn't start server:\n" + ioe);
+//        }
+//    }
 
     // The mock procedure inside main is basically the same as that in the integration tests.
     public static void main(String[] args) throws IOException {
@@ -32,16 +48,16 @@ public final class Santorini {
         boolean canInit = controller.initGame(names[0], names[1]);
         if(!canInit) return;
 
-        God god = new Athena();
+        controller.chooseGod("Athena", "Pan");
         // Players picking starting position for workers
         for(Action setup: mockSetup) {
-            boolean canPickPositions = controller.pickStartingPosition(setup.getType(), setup.getStartPos());
+            boolean canPickPositions = controller.pickStartingPosition(setup.getStartPos());
             if(!canPickPositions) return;
         }
         System.out.println(SANTORINI.getCurrentPlayer().getName());
         // Players take turns to move and build
         for(Action round: mockRounds) {
-            controller.hitRound(round.getType(), round.getMoveTo(), round.getBuildOn());
+            //controller.hitRound(round.getType(), round.getMoveTo(), round.getBuildOn());
         }
     }
 }

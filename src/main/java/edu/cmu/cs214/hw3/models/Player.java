@@ -73,7 +73,7 @@ public class Player {
         return null;
     }
 
-    public boolean getIsWinner() {return isWinner;}
+    public boolean isWinner() {return isWinner;}
 
     public void setIsWinner() {
         isWinner = true;

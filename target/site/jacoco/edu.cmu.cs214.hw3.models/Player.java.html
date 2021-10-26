@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Player.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">hw3</a> &gt; <a href="index.source.html" class="el_package">edu.cmu.cs214.hw3.models</a> &gt; <span class="el_source">Player.java</span></div><h1>Player.java</h1><pre class="source lang-java linenums">package edu.cmu.cs214.hw3.models;
 
+import edu.cmu.cs214.hw3.cards.God;
 import edu.cmu.cs214.hw3.utils.WorkerType;
 
 public class Player {
@@ -7,6 +8,7 @@ public class Player {
     private final Worker workerA;
     private final Worker workerB;
     private boolean isWinner;
+    private God god;
 
     /**
      * This constructor will check if the name is empty. If it is,
@@ -15,19 +17,25 @@ public class Player {
      *
      * @param name Name to identify the player
      */
-<span class="fc" id="L18">    public Player(String name) {</span>
-<span class="fc bfc" id="L19" title="All 2 branches covered.">        if(name.equals(&quot;&quot;)) {</span>
-<span class="fc" id="L20">            throw new IllegalArgumentException(&quot;Player cannot have an empty name.&quot;);</span>
+<span class="fc" id="L20">    public Player(String name) {</span>
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        if(name.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L22">            throw new IllegalArgumentException(&quot;Player cannot have an empty name.&quot;);</span>
         }
-<span class="fc" id="L22">        this.name = name;</span>
-<span class="fc" id="L23">        this.workerA = new Worker(WorkerType.TYPE_A, this);</span>
-<span class="fc" id="L24">        this.workerB = new Worker(WorkerType.TYPE_B, this);</span>
-<span class="fc" id="L25">        this.isWinner = false;</span>
-<span class="fc" id="L26">    }</span>
+<span class="fc" id="L24">        this.name = name;</span>
+<span class="fc" id="L25">        this.workerA = new Worker(WorkerType.TYPE_A, this);</span>
+<span class="fc" id="L26">        this.workerB = new Worker(WorkerType.TYPE_B, this);</span>
+<span class="fc" id="L27">        this.isWinner = false;</span>
+<span class="fc" id="L28">    }</span>
 
     public String getName() {
-<span class="fc" id="L29">        return name;</span>
+<span class="nc" id="L31">        return name;</span>
     }
+
+<span class="nc" id="L34">    public God getGod() { return this.god; }</span>
+
+    public void setGod(God god) {
+<span class="nc" id="L37">        this.god = god;</span>
+<span class="nc" id="L38">    }</span>
 
     /**
      * Set a non-empty name to the player.
@@ -35,42 +43,40 @@ public class Player {
      * @return True if name is valid and player's name is changed, false otherwise.
      */
     public boolean setName(String newName) {
-<span class="fc bfc" id="L38" title="All 2 branches covered.">        if (!newName.equals(&quot;&quot;)) {</span>
-<span class="fc" id="L39">            name = newName;</span>
-<span class="fc" id="L40">            return true;</span>
+<span class="fc bfc" id="L46" title="All 2 branches covered.">        if (!newName.equals(&quot;&quot;)) {</span>
+<span class="fc" id="L47">            name = newName;</span>
+<span class="fc" id="L48">            return true;</span>
         }
-<span class="fc" id="L42">        return false;</span>
+<span class="fc" id="L50">        return false;</span>
     }
 
     public Worker[] getAllWorkers() {
-<span class="fc" id="L46">        return new Worker[] {workerA, workerB};</span>
+<span class="fc" id="L54">        return new Worker[] {workerA, workerB};</span>
     }
 
     public Worker getWorkerByType(WorkerType type) {
-<span class="pc bpc" id="L50" title="1 of 2 branches missed.">       if (type == WorkerType.TYPE_A) {</span>
-<span class="nc" id="L51">           return workerA;</span>
-<span class="fc bfc" id="L52" title="All 2 branches covered.">       } else if (type == WorkerType.TYPE_B) {</span>
-<span class="fc" id="L53">           return workerB;</span>
+<span class="pc bpc" id="L58" title="1 of 2 branches missed.">       if (type == WorkerType.TYPE_A) {</span>
+<span class="nc" id="L59">           return workerA;</span>
+<span class="fc bfc" id="L60" title="All 2 branches covered.">       } else if (type == WorkerType.TYPE_B) {</span>
+<span class="fc" id="L61">           return workerB;</span>
        }
-<span class="fc" id="L55">       return null;</span>
+<span class="fc" id="L63">       return null;</span>
     }
 
     public Worker getWorkerByPosition(Cell pos) {
-<span class="nc bnc" id="L59" title="All 2 branches missed.">        if (workerA.getCurPosition().isEqual(pos)) {</span>
-<span class="nc" id="L60">            return workerA;</span>
+<span class="nc bnc" id="L67" title="All 2 branches missed.">        if (workerA.getCurPosition().isEqual(pos)) {</span>
+<span class="nc" id="L68">            return workerA;</span>
         }
-<span class="nc bnc" id="L62" title="All 2 branches missed.">        if (workerB.getCurPosition().isEqual(pos)) {</span>
-<span class="nc" id="L63">            return workerB;</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">        if (workerB.getCurPosition().isEqual(pos)) {</span>
+<span class="nc" id="L71">            return workerB;</span>
         }
-<span class="nc" id="L65">        return null;</span>
+<span class="nc" id="L73">        return null;</span>
     }
 
-    public boolean isWinner() {
-<span class="fc" id="L69">        return isWinner;</span>
-    }
+<span class="fc" id="L76">    public boolean isWinner() {return isWinner;}</span>
 
     public void setIsWinner() {
-<span class="fc" id="L73">        isWinner = true;</span>
-<span class="fc" id="L74">    }</span>
+<span class="fc" id="L79">        isWinner = true;</span>
+<span class="fc" id="L80">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
