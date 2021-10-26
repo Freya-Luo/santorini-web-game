@@ -50,7 +50,7 @@ public class Worker {
     public void checkIfWin() {
         // If the player wins by god power
         if (getPlayer().isWinner()) return;
-        if(!curPosition.isCompleted() && curPosition.getHeight() == 3) {
+        if(!curPosition.isCompleted() && curPosition.getHeight() == Cell.getTop()) {
             player.setIsWinner();
         }
     }

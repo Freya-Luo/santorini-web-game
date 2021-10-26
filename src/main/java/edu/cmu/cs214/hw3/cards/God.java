@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class God {
-    protected boolean powerToMove = false;
-    protected boolean powerToBuild = false;
+    private boolean powerToMove = false;
+    private boolean powerToBuild = false;
 
     public void setUsePowerToMove() {
         powerToMove = true;
@@ -42,6 +42,7 @@ public abstract class God {
      * A cell is unoccupied, or it's level is not 2 or more levels higher than worker's
      * level is considered as movable.
      * @param worker The list of eight neighboring cells.
+     * @param game Current game
      * @return The list of possible cells that worker can move to.
      */
     public List<Cell> getMovableCells(Worker worker, Game game) {

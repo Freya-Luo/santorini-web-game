@@ -5,7 +5,7 @@ public class Cell {
     private final int y;
     private boolean isOccupied;
     private int height;
-    private int maxHeight = 4;
+    private static final int TOP = 3;
     //private boolean preferable = false;
     private String avatar;
     private String link;
@@ -38,6 +38,8 @@ public class Cell {
 
     public int getY() { return y; }
 
+    public static int getTop() { return TOP; }
+
     public boolean isEqual(Cell that) {
         if (this == that) return true;
         return this.getX() == that.getX()
@@ -54,7 +56,7 @@ public class Cell {
      * as completed. Completed tower cannot be added more levels.
      */
     public void addLevel() {
-        if(height <= 3) {
+        if(height <= TOP) {
             height += 1;
         }
     }
@@ -65,7 +67,7 @@ public class Cell {
      *
      * @return True if cell is completed.
      */
-    public boolean isCompleted() { return height == maxHeight; }
+    public boolean isCompleted() { return height == TOP + 1; }
 
     /**
      * This functions checks if worker can successfully climb up to

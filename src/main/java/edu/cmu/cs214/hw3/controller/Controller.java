@@ -11,12 +11,12 @@ import edu.cmu.cs214.hw3.utils.WorkerType;
 import java.util.List;
 
 public class Controller {
-    private final Game GAME;
+    private final Game game;
     private ConfigureMetadata configurator;
 
     public Controller(Game game) {
-        this.GAME = game;
-        this.configurator = new ConfigureMetadata(GAME.getBoard());
+        this.game = game;
+        this.configurator = new ConfigureMetadata(game.getBoard());
     }
 
     /**
@@ -35,8 +35,8 @@ public class Controller {
         Player playerA = new Player(nameA);
         Player playerB = new Player(nameB);
 
-        GAME.setPlayers(playerA, playerB);
-        GAME.setCurrentPlayer(playerA);
+        game.setPlayers(playerA, playerB);
+        game.setCurrentPlayer(playerA);
         configurator.initCellMetadata();
         return true;
     }
@@ -57,8 +57,8 @@ public class Controller {
             String classNameB = basePath + godNameB;
             godA = (God) Class.forName(classNameA).getDeclaredConstructor().newInstance();
             godB= (God) Class.forName(classNameB).getDeclaredConstructor().newInstance();
-            GAME.getCurrentPlayer().setGod(godA);
-            GAME.getNextPlayer().setGod(godB);
+            game.getCurrentPlayer().setGod(godA);
+            game.getNextPlayer().setGod(godB);
 
             configurator.matchPickStartingPositionURL();
             return true;
@@ -75,11 +75,11 @@ public class Controller {
      * @return True if worker can be placed on this position; false otherwise
      */
     public boolean pickStartingPosition(int[] position) {
-        GAME.setIsRunning();
+        game.setIsRunning();
 
         boolean success = true;
-        Player currentPlayer = GAME.getCurrentPlayer();
-        Player opponentPlayer = GAME.getNextPlayer();
+        Player currentPlayer = game.getCurrentPlayer();
+        Player opponentPlayer = game.getNextPlayer();
 
         Worker workerA = currentPlayer.getWorkerByType(WorkerType.TYPE_A);
         Worker workerB = currentPlayer.getWorkerByType(WorkerType.TYPE_B);
@@ -89,14 +89,14 @@ public class Controller {
         // Validation check for only allowing picking four workers in total
         if(workerA.getCurPosition() != null && workerB.getCurPosition() != null
             && workerOA.getCurPosition() != null && workerOB.getCurPosition() != null) {
-            System.out.println("All workers are set. Game is ready to go! Enjoy!");
+            System.out.println("All workers are set. game is ready to go! Enjoy!");
             return true;
         }
 
         if(workerA.getCurPosition() == null) {
-            success = workerA.setCurPosition(GAME.getBoard().getCell(position[0], position[1]));
+            success = workerA.setCurPosition(game.getBoard().getCell(position[0], position[1]));
         } else if (workerB.getCurPosition() == null) {
-            success = workerB.setCurPosition(GAME.getBoard().getCell(position[0], position[1]));
+            success = workerB.setCurPosition(game.getBoard().getCell(position[0], position[1]));
         }
 
         if(!success) {
@@ -105,7 +105,7 @@ public class Controller {
         }
 
         if (workerA.getCurPosition() != null && workerB.getCurPosition() != null) {
-            GAME.takeTurns();
+            game.takeTurns();
             if (workerOA.getCurPosition() != null && workerOB.getCurPosition() != null) {
                 configurator.matchRoundURL();
             }
@@ -126,39 +126,39 @@ public class Controller {
      * has invalid action (either move or build) or no winner is generated.
      */
     public boolean hitRound(int[] curPos, int[] movePos, int[] buildPos) {
-        if (!GAME.getIsRunning()) return false;
+        if (!game.getIsRunning()) return false;
 
-        God currentGod = GAME.getCurrentPlayer().getGod();
-        God opponentGod = GAME.getNextPlayer().getGod();
+        God currentGod = game.getCurrentPlayer().getGod();
+        God opponentGod = game.getNextPlayer().getGod();
 
-        Cell curCell = GAME.getBoard().getCell(curPos[0], curPos[1]);
-        Worker worker = GAME.getCurrentPlayer().getWorkerByPosition(curCell);
+        Cell curCell = game.getBoard().getCell(curPos[0], curPos[1]);
+        Worker worker = game.getCurrentPlayer().getWorkerByPosition(curCell);
         if(worker == null) {
             System.out.println("Please choosing a valid worker to start moving!");
             return false;
         }
 
-        Cell moveTo = GAME.getBoard().getCell(movePos[0], movePos[1]);
+        Cell moveTo = game.getBoard().getCell(movePos[0], movePos[1]);
         // Check if move is valid and update game
         boolean moveSuccess = canMove(worker, moveTo);
         if(!moveSuccess) {
             // If moving fails, choose another cell to move to
-            System.out.println("Oops! You (" + GAME.getCurrentPlayer().getName() +
+            System.out.println("Oops! You (" + game.getCurrentPlayer().getName() +
                     ") cannot move to this cell [" + movePos[0] + ", " +
                     movePos[1] +"].");
             return false;
         }
-        currentGod.doMove(worker, moveTo, GAME);
+        currentGod.doMove(worker, moveTo, game);
 
         worker.checkIfWin();
         if(getWinner() != null) return true;
 
-        Cell buildOn = GAME.getBoard().getCell(buildPos[0], buildPos[1]);
+        Cell buildOn = game.getBoard().getCell(buildPos[0], buildPos[1]);
         // Check if build is valid and update game
         boolean canBuild = canBuild(worker, buildOn);
         if(!canBuild) {
             // If moving fails, choose another cell to move to
-            System.out.println("Sorry! You (" + GAME.getCurrentPlayer().getName() +
+            System.out.println("Sorry! You (" + game.getCurrentPlayer().getName() +
                     ") cannot build on this cell [" + buildPos[0] + ", "
                     + buildPos[1] + "].");
             return false;
@@ -167,7 +167,7 @@ public class Controller {
 
         if(getWinner() != null) return true;
 
-        GAME.takeTurns();
+        game.takeTurns();
         return true;
     }
 
@@ -179,9 +179,9 @@ public class Controller {
      * @return True if worker can successfully move to that position; False otherwise
      */
     public boolean canMove(Worker worker, Cell moveTo) {
-        God currentGod = GAME.getCurrentPlayer().getGod();
-        God opponentGod = GAME.getNextPlayer().getGod();
-        List<Cell> movableCells = currentGod.getMovableCells(worker, GAME);
+        God currentGod = game.getCurrentPlayer().getGod();
+        God opponentGod = game.getNextPlayer().getGod();
+        List<Cell> movableCells = currentGod.getMovableCells(worker, game);
         // Apply opponent's power from last round
         movableCells = opponentGod.applyOpponentPowerToMove(movableCells, worker);
 
@@ -196,16 +196,16 @@ public class Controller {
      * @return True if worker can successfully build on that position; False otherwise
      */
     public boolean canBuild(Worker worker, Cell buildOn) {
-        God currentGod = GAME.getCurrentPlayer().getGod();
-        God opponentGod = GAME.getNextPlayer().getGod();
+        God currentGod = game.getCurrentPlayer().getGod();
+        God opponentGod = game.getNextPlayer().getGod();
 
-        List<Cell> neighbors = GAME.getBoard().getNeighbors(worker.getCurPosition());
+        List<Cell> neighbors = game.getBoard().getNeighbors(worker.getCurPosition());
         List<Cell> buildableCells = currentGod.getBuildableCells(neighbors);
         // Apply opponent's power from last round
         buildableCells = opponentGod.applyOpponentPowerToBuild(buildableCells);
 
         if(buildableCells.size() == 0) {
-            GAME.getNextPlayer().setIsWinner();
+            game.getNextPlayer().setIsWinner();
             return false;
         }
 
@@ -216,9 +216,9 @@ public class Controller {
 
 
     public Player getWinner() {
-        Player winner = GAME.getWinner();
+        Player winner = game.getWinner();
         if (winner != null){
-            GAME.setIsFinished();
+            game.setIsFinished();
             System.out.println("Congratulation! " + winner.getName() + " is the winner!");
         }
         return winner;

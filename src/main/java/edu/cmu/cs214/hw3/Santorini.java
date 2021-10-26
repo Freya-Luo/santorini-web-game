@@ -27,7 +27,7 @@ import fi.iki.elonen.NanoHTTPD;
 public final class Santorini{
     // Game setup
     private static final Game SANTORINI = new Game();
-    private static final Controller controller = new Controller(SANTORINI);
+    private static final Controller CONTROLLER = new Controller(SANTORINI);
 
 //    public static void main(String[] args) {
 //        try {
@@ -45,19 +45,19 @@ public final class Santorini{
 
         // Choose players and Game preparation
         String[] names = loader.loadMockPlayerNamesFromFile();
-        boolean canInit = controller.initGame(names[0], names[1]);
+        boolean canInit = CONTROLLER.initGame(names[0], names[1]);
         if(!canInit) return;
 
-        controller.chooseGod("Athena", "Pan");
+        CONTROLLER.chooseGod("Athena", "Pan");
         // Players picking starting position for workers
         for(Action setup: mockSetup) {
-            boolean canPickPositions = controller.pickStartingPosition(setup.getStartPos());
+            boolean canPickPositions = CONTROLLER.pickStartingPosition(setup.getStartPos());
             if(!canPickPositions) return;
         }
         System.out.println(SANTORINI.getCurrentPlayer().getName());
         // Players take turns to move and build
-        for(Action round: mockRounds) {
-            //controller.hitRound(round.getType(), round.getMoveTo(), round.getBuildOn());
-        }
+//        for(Action round: mockRounds) {
+//            CONTROLLER.hitRound(round.getType(), round.getMoveTo(), round.getBuildOn());
+//        }
     }
 }

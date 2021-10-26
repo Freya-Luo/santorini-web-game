@@ -1,19 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <checkstyle version="8.45">
-<file name="C:\Users\y233l\Desktop\courses\17514\hw3\src\main\java\edu\cmu\cs214\hw3\models\Board.java">
-</file>
 <file name="C:\Users\y233l\Desktop\courses\17514\hw3\src\main\java\edu\cmu\cs214\hw3\models\Cell.java">
-<error line="8" column="29" severity="error" message="&apos;4&apos; is a magic number." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
-<error line="56" column="22" severity="error" message="&apos;3&apos; is a magic number." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
-</file>
-<file name="C:\Users\y233l\Desktop\courses\17514\hw3\src\main\java\edu\cmu\cs214\hw3\models\Game.java">
-<error line="229" severity="error" message="@return tag should be present and have description." source="com.puppycrawl.tools.checkstyle.checks.javadoc.JavadocMethodCheck"/>
-</file>
-<file name="C:\Users\y233l\Desktop\courses\17514\hw3\src\main\java\edu\cmu\cs214\hw3\models\Player.java">
-</file>
-<file name="C:\Users\y233l\Desktop\courses\17514\hw3\src\main\java\edu\cmu\cs214\hw3\models\Worker.java">
-<error line="73" column="69" severity="error" message="&apos;3&apos; is a magic number." source="com.puppycrawl.tools.checkstyle.checks.coding.MagicNumberCheck"/>
-</file>
-<file name="C:\Users\y233l\Desktop\courses\17514\hw3\src\main\java\edu\cmu\cs214\hw3\Santorini.java">
 </file>
 </checkstyle>

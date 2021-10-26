@@ -6,18 +6,18 @@ public class Worker {
     private final Player player;
     private Cell curPosition;
 
-<span class="fc" id="L9">    public Worker(WorkerType type, Player player) {</span>
-<span class="fc" id="L10">        this.type = type;</span>
-<span class="fc" id="L11">        this.player = player;</span>
-<span class="fc" id="L12">        this.curPosition = null;</span>
-<span class="fc" id="L13">    }</span>
+<span class="nc" id="L9">    public Worker(WorkerType type, Player player) {</span>
+<span class="nc" id="L10">        this.type = type;</span>
+<span class="nc" id="L11">        this.player = player;</span>
+<span class="nc" id="L12">        this.curPosition = null;</span>
+<span class="nc" id="L13">    }</span>
 
     public WorkerType getType() {
 <span class="nc" id="L16">        return type;</span>
     }
 
     public Cell getCurPosition() {
-<span class="fc" id="L20">        return curPosition;</span>
+<span class="nc" id="L20">        return curPosition;</span>
     }
 
     /**
@@ -28,20 +28,20 @@ public class Worker {
      * @return True if he can successfully move.
      */
     public boolean setCurPosition(Cell newPosition) {
-<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if(newPosition.isOccupied()){</span>
+<span class="nc bnc" id="L31" title="All 2 branches missed.">        if(newPosition.isOccupied()){</span>
 <span class="nc" id="L32">            return false;</span>
         }
         // Set the starting position.
-<span class="fc bfc" id="L35" title="All 2 branches covered.">        if (curPosition != null) {</span>
-<span class="fc" id="L36">            curPosition.setFree();</span>
+<span class="nc bnc" id="L35" title="All 2 branches missed.">        if (curPosition != null) {</span>
+<span class="nc" id="L36">            curPosition.setFree();</span>
         }
-<span class="fc" id="L38">        curPosition = newPosition;</span>
-<span class="fc" id="L39">        curPosition.setOccupied();</span>
-<span class="fc" id="L40">        return true;</span>
+<span class="nc" id="L38">        curPosition = newPosition;</span>
+<span class="nc" id="L39">        curPosition.setOccupied();</span>
+<span class="nc" id="L40">        return true;</span>
     }
 
     public Player getPlayer() {
-<span class="fc" id="L44">        return player;</span>
+<span class="nc" id="L44">        return player;</span>
     }
 
     /**
@@ -49,10 +49,10 @@ public class Worker {
      */
     public void checkIfWin() {
         // If the player wins by god power
-<span class="pc bpc" id="L52" title="1 of 2 branches missed.">        if (getPlayer().isWinner()) return;</span>
-<span class="fc bfc" id="L53" title="All 4 branches covered.">        if(!curPosition.isCompleted() &amp;&amp; curPosition.getHeight() == 3) {</span>
-<span class="fc" id="L54">            player.setIsWinner();</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">        if (getPlayer().isWinner()) return;</span>
+<span class="nc bnc" id="L53" title="All 4 branches missed.">        if(!curPosition.isCompleted() &amp;&amp; curPosition.getHeight() == Cell.getTop()) {</span>
+<span class="nc" id="L54">            player.setIsWinner();</span>
         }
-<span class="fc" id="L56">    }</span>
+<span class="nc" id="L56">    }</span>
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.7.202105040129</span></div></body></html>
