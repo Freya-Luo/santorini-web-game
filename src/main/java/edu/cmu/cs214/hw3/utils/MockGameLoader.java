@@ -19,8 +19,8 @@ public class MockGameLoader {
 
     private final File file;
     private String[] names = new String[2];
-    private List<Action> setupSteps = new ArrayList<>();
-    private List<Action> rounds = new ArrayList<>();
+    private List<RoundAction> setupSteps = new ArrayList<>();
+    private List<RoundAction> rounds = new ArrayList<>();
 
     public MockGameLoader(File file) {
         this.file = file;
@@ -42,7 +42,7 @@ public class MockGameLoader {
     }
 
     // Load the mock rounds from the file
-    public List<Action> loadMockRoundsFromFile() throws IOException {
+    public List<RoundAction> loadMockRoundsFromFile() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         try {
             String line;
@@ -50,8 +50,8 @@ public class MockGameLoader {
             while ((line = reader.readLine()) != null) {
                 if (line.contains("-")) {
                     parts = line.split("-");
-                    Action action = new Action(getType(parts[0]), getCellPos(parts[1]), getCellPos(parts[2]));
-                    rounds.add(action);
+                    RoundAction roundAction = new RoundAction(getType(parts[0]), getCellPos(parts[1]), getCellPos(parts[2]));
+                    rounds.add(roundAction);
                 }
             }
             return rounds;
@@ -61,7 +61,7 @@ public class MockGameLoader {
     }
 
     // Load the mock setup actions from file
-    public List<Action> loadMockSetupFromFile() throws IOException {
+    public List<RoundAction> loadMockSetupFromFile() throws IOException {
         BufferedReader reader = new BufferedReader(new FileReader(file));
         try {
             String line;
@@ -69,8 +69,8 @@ public class MockGameLoader {
             while ((line = reader.readLine()) != null) {
                 if (line.contains(":")) {
                     parts = line.split(":");
-                    Action action = new Action(parts[0], getType(parts[1]), getCellPos(parts[2]));
-                    setupSteps.add(action);
+                    RoundAction roundAction = new RoundAction(parts[0], getType(parts[1]), getCellPos(parts[2]));
+                    setupSteps.add(roundAction);
                 }
             }
             return setupSteps;
@@ -81,7 +81,7 @@ public class MockGameLoader {
 
     // Load the mock players names from file
     public String[] loadMockPlayerNamesFromFile() {
-        for(Action setup: setupSteps) {
+        for(RoundAction setup: setupSteps) {
             if (names[0] == null) {
                 names[0]= setup.getName();
             } else if (names[1] == null && !setup.getName().equals(names[0])) {

@@ -1,6 +1,8 @@
 package edu.cmu.cs214.hw3.cards;
 
 import edu.cmu.cs214.hw3.models.Cell;
+import edu.cmu.cs214.hw3.models.Game;
+import edu.cmu.cs214.hw3.models.Worker;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,14 +12,8 @@ public class Demeter extends God {
     private Cell oldPosition = null;
 
     @Override
-    public List<Cell> getBuildableCells(List<Cell> neighbors) {
-        List<Cell> buildableCells = new ArrayList<>();
-
-        for(Cell cell : neighbors) {
-            if (!cell.isOccupied()) {
-                buildableCells.add(cell);
-            }
-        }
+    public List<Cell> getBuildableCells(Worker worker, Game game) {
+        List<Cell> buildableCells = super.getBuildableCells(worker, game);
 
         if (oldPosition != null) {
             buildableCells.remove(oldPosition);

@@ -42,10 +42,10 @@ So, one possible design of data flow could be:
   - `readyGo`: check if all previous steps are correctly, if yes, then set `phase` to `RUNNING`
   - `hitRound`: players take turns to make worker move and build with the control of `ActionController`; once winner generates, `phase` changes to `DONE`
 - `ActionController`: `chooseMove` & `chooseBuild`
-  - the validation of each action is checked
+  - the validation of each roundAction is checked
   - control is taken over back and forth between itself and `GameController`
-    - after "Move" action to check if a winner appears
-    - also after "Build" action to let players take turns
+    - after "Move" roundAction to check if a winner appears
+    - also after "Build" roundAction to let players take turns
 
 ---
 

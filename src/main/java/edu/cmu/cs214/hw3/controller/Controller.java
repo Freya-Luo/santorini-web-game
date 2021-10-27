@@ -6,12 +6,14 @@ import edu.cmu.cs214.hw3.models.Game;
 import edu.cmu.cs214.hw3.models.Player;
 import edu.cmu.cs214.hw3.models.Worker;
 import edu.cmu.cs214.hw3.utils.ConfigureMetadata;
+import edu.cmu.cs214.hw3.utils.RoundAction;
 import edu.cmu.cs214.hw3.utils.WorkerType;
 
 import java.util.List;
 
 public class Controller {
     private final Game game;
+    private RoundAction roundAction;
     private ConfigureMetadata configurator;
 
     public Controller(Game game) {
@@ -113,105 +115,149 @@ public class Controller {
         return true;
     }
 
-
-    /**
-     * Two players take turns to move worker and build tower.
-     * This method will reject invalid move or build. The next round can only be hit if
-     * last round of another player is valid.
-     *
-     * @param curPos Position of the current chosen worker
-     * @param movePos Position the worker is going to move to
-     * @param buildPos Position the worker is going to build block/dome on
-     * @return True if the game is finished and a winner is generated. False if this round
-     * has invalid action (either move or build) or no winner is generated.
-     */
-    public boolean hitRound(int[] curPos, int[] movePos, int[] buildPos) {
-        if (!game.getIsRunning()) return false;
-
-        God currentGod = game.getCurrentPlayer().getGod();
-        God opponentGod = game.getNextPlayer().getGod();
+    public Worker chooseWorker(int[] curPos) {
+        if (!game.getIsRunning()) return null;
 
         Cell curCell = game.getBoard().getCell(curPos[0], curPos[1]);
         Worker worker = game.getCurrentPlayer().getWorkerByPosition(curCell);
         if(worker == null) {
-            System.out.println("Please choosing a valid worker to start moving!");
-            return false;
+            System.out.println("Please choosing a worker to start moving!");
+            return null;
         }
+        roundAction.setRoundWorker(worker);
+        return worker;
+    }
 
+    public List<Cell> computeMovableCells() {
+        Worker roundWorker = roundAction.getRoundWorker();
+        God currentGod = game.getCurrentPlayer().getGod();
+        God opponentGod = game.getNextPlayer().getGod();
+
+        List<Cell> movableCells = currentGod.getMovableCells(roundWorker, game);
+        // Apply opponent's power from last round
+        movableCells = opponentGod.applyOpponentPowerToMove(movableCells, roundWorker);
+
+        roundAction.setRoundPossibleMoves(movableCells);
+        return movableCells;
+    }
+
+    public boolean roundMove(int[] movePos) {
+        Worker roundWorker = roundAction.getRoundWorker();
+        List<Cell> possibleMoves = roundAction.getRoundPossibleMoves();
         Cell moveTo = game.getBoard().getCell(movePos[0], movePos[1]);
-        // Check if move is valid and update game
-        boolean moveSuccess = canMove(worker, moveTo);
-        if(!moveSuccess) {
+
+        if(possibleMoves.size() == 0 || !possibleMoves.contains(moveTo)) {
             // If moving fails, choose another cell to move to
             System.out.println("Oops! You (" + game.getCurrentPlayer().getName() +
                     ") cannot move to this cell [" + movePos[0] + ", " +
                     movePos[1] +"].");
             return false;
         }
-        currentGod.doMove(worker, moveTo, game);
 
-        worker.checkIfWin();
-        if(getWinner() != null) return true;
+        God currentGod = game.getCurrentPlayer().getGod();
+        currentGod.doMove(roundWorker, moveTo, game);
+        return true;
+    }
 
+    public List<Cell> computeBuildableCells() {
+        Worker roundWorker = roundAction.getRoundWorker();
+        God currentGod = game.getCurrentPlayer().getGod();
+        God opponentGod = game.getNextPlayer().getGod();
+
+        List<Cell> buildableCells = currentGod.getBuildableCells(roundWorker, game);
+        // Apply opponent's power from last round
+        buildableCells = opponentGod.applyOpponentPowerToBuild(buildableCells);
+
+        roundAction.setRoundPossibleBuilds(buildableCells);
+        return buildableCells;
+    }
+
+    public boolean roundBuild(int[] buildPos) {
+        List<Cell> possibleBuilds = roundAction.getRoundPossibleBuilds();
         Cell buildOn = game.getBoard().getCell(buildPos[0], buildPos[1]);
-        // Check if build is valid and update game
-        boolean canBuild = canBuild(worker, buildOn);
-        if(!canBuild) {
+
+        if(possibleBuilds.size() == 0 || !possibleBuilds.contains(buildOn)) {
             // If moving fails, choose another cell to move to
             System.out.println("Sorry! You (" + game.getCurrentPlayer().getName() +
                     ") cannot build on this cell [" + buildPos[0] + ", "
                     + buildPos[1] + "].");
             return false;
         }
+
+        God currentGod = game.getCurrentPlayer().getGod();
         currentGod.doBuild(buildOn);
-
-        if(getWinner() != null) return true;
-
-        game.takeTurns();
         return true;
     }
 
+    public void takeTurns() {
 
-    /**
-     * The precondition of building is worker moves successfully
-     * @param worker current worker
-     * @param moveTo targeted move to position
-     * @return True if worker can successfully move to that position; False otherwise
-     */
-    public boolean canMove(Worker worker, Cell moveTo) {
-        God currentGod = game.getCurrentPlayer().getGod();
-        God opponentGod = game.getNextPlayer().getGod();
-        List<Cell> movableCells = currentGod.getMovableCells(worker, game);
-        // Apply opponent's power from last round
-        movableCells = opponentGod.applyOpponentPowerToMove(movableCells, worker);
-
-        if(!movableCells.contains(moveTo)) return false;
-        return true;
     }
+//    public boolean hitRound(int[] curPos, int[] movePos, int[] buildPos) {
+//
+//        Cell moveTo = game.getBoard().getCell(movePos[0], movePos[1]);
+//        // Check if move is valid and update game
+//        boolean moveSuccess = canMove(worker, moveTo);
+//        if(!moveSuccess) {
+//            // If moving fails, choose another cell to move to
+//            System.out.println("Oops! You (" + game.getCurrentPlayer().getName() +
+//                    ") cannot move to this cell [" + movePos[0] + ", " +
+//                    movePos[1] +"].");
+//            return false;
+//        }
+//        currentGod.doMove(worker, moveTo, game);
+//
+//        worker.checkIfWin();
+//        if(getWinner() != null) return true;
+//
+//        Cell buildOn = game.getBoard().getCell(buildPos[0], buildPos[1]);
+//        // Check if build is valid and update game
+//        boolean canBuild = canBuild(worker, buildOn);
+//        if(!canBuild) {
+//            // If moving fails, choose another cell to move to
+//            System.out.println("Sorry! You (" + game.getCurrentPlayer().getName() +
+//                    ") cannot build on this cell [" + buildPos[0] + ", "
+//                    + buildPos[1] + "].");
+//            return false;
+//        }
+//        currentGod.doBuild(buildOn);
+//
+//        if(getWinner() != null) return true;
+//
+//        game.takeTurns();
+//        return true;
+//    }
 
-    /**
-     * The precondition of building is worker moves successfully
-     * @param worker current worker
-     * @param buildOn targeted build on position
-     * @return True if worker can successfully build on that position; False otherwise
-     */
-    public boolean canBuild(Worker worker, Cell buildOn) {
-        God currentGod = game.getCurrentPlayer().getGod();
-        God opponentGod = game.getNextPlayer().getGod();
 
-        List<Cell> neighbors = game.getBoard().getNeighbors(worker.getCurPosition());
-        List<Cell> buildableCells = currentGod.getBuildableCells(neighbors);
-        // Apply opponent's power from last round
-        buildableCells = opponentGod.applyOpponentPowerToBuild(buildableCells);
 
-        if(buildableCells.size() == 0) {
-            game.getNextPlayer().setIsWinner();
-            return false;
-        }
+//    public boolean canMove(Worker worker, Cell moveTo) {
+//        God currentGod = game.getCurrentPlayer().getGod();
+//        God opponentGod = game.getNextPlayer().getGod();
+//        List<Cell> movableCells = currentGod.getMovableCells(worker, game);
+//        // Apply opponent's power from last round
+//        movableCells = opponentGod.applyOpponentPowerToMove(movableCells, worker);
+//
+//        if(!movableCells.contains(moveTo)) return false;
+//        return true;
+//    }
 
-        if(!buildableCells.contains(buildOn)) return false;
-        return true;
-    }
+
+//    public boolean canBuild(Worker worker, Cell buildOn) {
+//        God currentGod = game.getCurrentPlayer().getGod();
+//        God opponentGod = game.getNextPlayer().getGod();
+//
+//        List<Cell> neighbors = game.getBoard().getNeighbors(worker.getCurPosition());
+//        List<Cell> buildableCells = currentGod.getBuildableCells(neighbors);
+//        // Apply opponent's power from last round
+//        buildableCells = opponentGod.applyOpponentPowerToBuild(buildableCells);
+//
+//        if(buildableCells.size() == 0) {
+//            game.getNextPlayer().setIsWinner();
+//            return false;
+//        }
+//
+//        if(!buildableCells.contains(buildOn)) return false;
+//        return true;
+//    }
 
 
 

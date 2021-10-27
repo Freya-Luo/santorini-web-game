@@ -41,7 +41,7 @@ public abstract class God {
      *
      * A cell is unoccupied, or it's level is not 2 or more levels higher than worker's
      * level is considered as movable.
-     * @param worker The list of eight neighboring cells.
+     * @param worker Chosen worker
      * @param game Current game
      * @return The list of possible cells that worker can move to.
      */
@@ -63,10 +63,12 @@ public abstract class God {
      * finds the possible cells that worker can build block/dome on.
      *
      * A cell is unoccupied is considered as buildable.
-     * @param neighbors The list of eight neighboring cells.
+     * @param worker Chosen worker
+     * @param game Current game
      * @return The list of possible cells that worker can build on.
      */
-    public List<Cell> getBuildableCells(List<Cell> neighbors) {
+    public List<Cell> getBuildableCells(Worker worker, Game game) {
+        List<Cell> neighbors = game.getBoard().getNeighbors(worker.getCurPosition());
         List<Cell> buildableCells = new ArrayList<>();
 
         for(Cell cell : neighbors) {
