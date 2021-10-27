@@ -2,8 +2,8 @@ package edu.cmu.cs214.hw3;
 
 import edu.cmu.cs214.hw3.controller.Controller;
 import edu.cmu.cs214.hw3.models.Game;
-import edu.cmu.cs214.hw3.utils.RoundAction;
-import edu.cmu.cs214.hw3.utils.MockGameLoader;
+//import edu.cmu.cs214.hw3.utils.RoundAction;
+//import edu.cmu.cs214.hw3.utils.MockGameLoader;
 
 import java.io.File;
 import java.io.IOException;
@@ -34,25 +34,25 @@ public final class Santorini{
 
     // The mock procedure inside main is basically the same as that in the integration tests.
     public static void main(String[] args) throws IOException {
-        MockGameLoader loader = new MockGameLoader(new File("mockSantorini/mockSteps.csv"));
-        List<RoundAction> mockSetup = loader.loadMockSetupFromFile();
-        List<RoundAction> mockRounds = loader.loadMockRoundsFromFile();
-
-        // Choose players and Game preparation
-        String[] names = loader.loadMockPlayerNamesFromFile();
-        boolean canInit = CONTROLLER.initGame(names[0], names[1]);
-        if(!canInit) return;
-
-        CONTROLLER.chooseGod("Athena", "Pan");
-        // Players picking starting position for workers
-        for(RoundAction setup: mockSetup) {
-            //boolean canPickPositions = CONTROLLER.pickStartingPosition(setup.getStartPos());
-            //if(!canPickPositions) return;
-        }
-        System.out.println(SANTORINI.getCurrentPlayer().getName());
-
-        for(RoundAction round: mockRounds) {
-            //CONTROLLER.hitRound(round.getType(), round.getMoveTo(), round.getBuildOn());
-        }
+//        MockGameLoader loader = new MockGameLoader(new File("mockSantorini/mockSteps.csv"));
+//        List<RoundAction> mockSetup = loader.loadMockSetupFromFile();
+//        List<RoundAction> mockRounds = loader.loadMockRoundsFromFile();
+//
+//        // Choose players and Game preparation
+//        String[] names = loader.loadMockPlayerNamesFromFile();
+//        boolean canInit = CONTROLLER.initGame(names[0], names[1]);
+//        if(!canInit) return;
+//
+//        CONTROLLER.chooseGod("Athena", "Pan");
+//        // Players picking starting position for workers
+//        for(RoundAction setup: mockSetup) {
+//            //boolean canPickPositions = CONTROLLER.pickStartingPosition(setup.getStartPos());
+//            //if(!canPickPositions) return;
+//        }
+//        System.out.println(SANTORINI.getCurrentPlayer().getName());
+//
+//        for(RoundAction round: mockRounds) {
+//            //CONTROLLER.hitRound(round.getType(), round.getMoveTo(), round.getBuildOn());
+//        }
     }
 }
