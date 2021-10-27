@@ -8,7 +8,6 @@ import java.util.List;
 
 public class Minotaur extends God {
 
-
     private Cell pushOpponentTo(Cell workerPos, Cell pushTo, Game game) {
         // Apply Minotaur God Rule
         int[] relativePos = {workerPos.getX() - pushTo.getX(), workerPos.getY() - pushTo.getY()};
@@ -25,7 +24,7 @@ public class Minotaur extends God {
 
         for(Cell cell : movableCells) {
             if (cell.isOccupied() && !cell.isCompleted() ) {
-                if (game.getNextPlayer().getWorkerByPosition(cell) != null) {
+                if (game.getOpponentPlayer().getWorkerByPosition(cell) != null) {
                     Cell opponentNewPos = pushOpponentTo(workerPos, cell, game);
                     if (opponentNewPos != null && !opponentNewPos.isOccupied()) {
                         movableCells.add(cell);
@@ -40,7 +39,7 @@ public class Minotaur extends God {
     public void doMove(Worker worker, Cell moveTo, Game game) {
         super.doMove(worker, moveTo, game);
         Cell opponentNewPos = pushOpponentTo(worker.getCurPosition(), moveTo, game);
-        game.getNextPlayer().getWorkerByPosition(moveTo).setCurPosition(opponentNewPos);
+        game.getOpponentPlayer().getWorkerByPosition(moveTo).setCurPosition(opponentNewPos);
     }
 
 }

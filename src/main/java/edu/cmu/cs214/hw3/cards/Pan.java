@@ -1,7 +1,7 @@
 package edu.cmu.cs214.hw3.cards;
 
-import edu.cmu.cs214.hw3.models.Cell;
 import edu.cmu.cs214.hw3.models.Game;
+import edu.cmu.cs214.hw3.models.Cell;
 import edu.cmu.cs214.hw3.models.Worker;
 
 public class Pan extends God {

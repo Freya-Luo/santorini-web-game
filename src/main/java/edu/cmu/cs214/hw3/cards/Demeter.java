@@ -1,10 +1,9 @@
 package edu.cmu.cs214.hw3.cards;
 
-import edu.cmu.cs214.hw3.models.Cell;
 import edu.cmu.cs214.hw3.models.Game;
+import edu.cmu.cs214.hw3.models.Cell;
 import edu.cmu.cs214.hw3.models.Worker;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Demeter extends God {

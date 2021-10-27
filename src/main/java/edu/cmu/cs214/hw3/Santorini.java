@@ -1,13 +1,10 @@
 package edu.cmu.cs214.hw3;
 
-import edu.cmu.cs214.hw3.controller.Controller;
 import edu.cmu.cs214.hw3.models.Game;
 //import edu.cmu.cs214.hw3.utils.RoundAction;
 //import edu.cmu.cs214.hw3.utils.MockGameLoader;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 /**
  * The URLs in this game are set as following:
@@ -21,8 +18,8 @@ import java.util.List;
  */
 public final class Santorini{
     // Game setup
-    private static final Game SANTORINI = new Game();
-    private static final Controller CONTROLLER = new Controller(SANTORINI);
+    //private static final Board SANTORINI = new Board();
+    private static final Game GAME = new Game();
 
 //    public static void main(String[] args) {
 //        try {
@@ -40,19 +37,19 @@ public final class Santorini{
 //
 //        // Choose players and Game preparation
 //        String[] names = loader.loadMockPlayerNamesFromFile();
-//        boolean canInit = CONTROLLER.initGame(names[0], names[1]);
+//        boolean canInit = GAME.initGame(names[0], names[1]);
 //        if(!canInit) return;
 //
-//        CONTROLLER.chooseGod("Athena", "Pan");
+//        GAME.chooseGod("Athena", "Pan");
 //        // Players picking starting position for workers
 //        for(RoundAction setup: mockSetup) {
-//            //boolean canPickPositions = CONTROLLER.pickStartingPosition(setup.getStartPos());
+//            //boolean canPickPositions = GAME.pickStartingPosition(setup.getStartPos());
 //            //if(!canPickPositions) return;
 //        }
 //        System.out.println(SANTORINI.getCurrentPlayer().getName());
 //
 //        for(RoundAction round: mockRounds) {
-//            //CONTROLLER.hitRound(round.getType(), round.getMoveTo(), round.getBuildOn());
+//            //GAME.hitRound(round.getType(), round.getMoveTo(), round.getBuildOn());
 //        }
     }
 }
