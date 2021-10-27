@@ -1,76 +1,75 @@
-//package edu.cmu.cs214.hw3.models;
-//import edu.cmu.cs214.hw3.utils.WorkerType;
-//
-//import org.junit.Before;
-//import org.junit.Test;
-//import org.junit.experimental.runners.Enclosed;
-//import org.junit.runner.RunWith;
-//
-//import java.util.ArrayList;
-//import java.util.List;
-//
-//import static org.hamcrest.MatcherAssert.assertThat;
-//import static org.hamcrest.Matchers.containsInAnyOrder;
-//import static org.hamcrest.Matchers.equalTo;
-//import static org.junit.Assert.*;
-//
-//@RunWith(Enclosed.class)
-//public class WorkerTest {
-//
-//    public static class WorkerStatusTest {
-//        private Player player = new Player("Freya");
-//        private Worker worker;
-//        private Cell target1;
-//        private Cell target2;
-//
-//        @Before
-//        public void init() {
-//            worker = new Worker(WorkerType.TYPE_A, player);
-//            target1 = new Cell(2, 1);
-//            target2 = new Cell(4, 0);
-//
-//            worker.setCurPosition(target1);
-//            worker.setCurPosition(target2);
-//        }
-//
-//        @Test
-//        public void testSetCurPosition() {
-//            assertTrue(worker.getCurPosition().isEqual(target2));
-//            assertTrue(worker.getCurPosition().isOccupied());
-//        }
-//
-//
-//        @Test
-//        public void testCheckIsWinOnLevel3() {
-//            for(int i = 0; i < 3; i++) {
-//                worker.getCurPosition().addLevel();
-//            }
-//
-//            worker.checkIfWin();
-//            assertTrue(worker.getPlayer().isWinner());
-//        }
-//
-//        @Test
-//        public void testCheckIsWinBelowLevel3() {
-//            for(int i = 0; i < 2; i++) {
-//                worker.getCurPosition().addLevel();
-//            }
-//
-//            worker.checkIfWin();
-//            assertFalse(worker.getPlayer().isWinner());
-//        }
-//
-//        @Test
-//        public void testCheckIsWinWithCompletedTower() {
-//            for(int i = 0; i < 4; i++) {
-//                worker.getCurPosition().addLevel();
-//            }
-//
-//            worker.checkIfWin();
-//            assertFalse(worker.getPlayer().isWinner());
-//        }
-//    }
-//
+package edu.cmu.cs214.hw3.models;
+import edu.cmu.cs214.hw3.utils.WorkerType;
+
+import org.junit.Before;
+import org.junit.Test;
+import static org.junit.Assert.*;
+
+
+public class WorkerTest {
+    private Player player = new Player("Freya");
+    private Worker worker;
+    private Cell target1;
+    private Cell target2;
+
+    @Before
+    public void init() {
+        worker = new Worker(WorkerType.TYPE_A, player);
+        target1 = new Cell(2, 1);
+        target2 = new Cell(4, 0);
+    }
+
+    @Test
+    public void testSetCurPositionWithUnoccupied() {
+        worker.setCurPosition(target1);
+
+        assertTrue(worker.getCurPosition().isEqual(target1));
+        assertTrue(worker.getCurPosition().isOccupied());
+    }
+
+    @Test
+    public void testSetCurPositionWithOccupied() {
+        target2.setOccupied();
+        worker.setCurPosition(target2);
+
+        assertNull(worker.getCurPosition());
+    }
+
+
+    @Test
+    public void testCheckIsWinOnLevel3() {
+        worker.setCurPosition(target1);
+        for (int i = 0; i < 3; i++) {
+            worker.getCurPosition().addLevel();
+        }
+
+        worker.checkIfWin();
+        assertTrue(worker.getPlayer().isWinner());
+    }
+
+    @Test
+    public void testCheckIsWinBelowLevel3() {
+        worker.setCurPosition(target1);
+        for (int i = 0; i < 2; i++) {
+            worker.getCurPosition().addLevel();
+        }
+
+        worker.checkIfWin();
+        assertFalse(worker.getPlayer().isWinner());
+    }
+
+    @Test
+    public void testCheckIsWinWithCompletedCell() {
+        worker.setCurPosition(target1);
+        for (int i = 0; i < 4; i++) {
+            worker.getCurPosition().addLevel();
+        }
+
+        worker.checkIfWin();
+        assertFalse(worker.getPlayer().isWinner());
+    }
+}
+
 //    public static class MovableAndBuildableCellsTest{
 //        private Player player = new Player("Freya");
 //        private Worker worker;
@@ -106,4 +105,4 @@
 //            }
 //        }
 //    }
-//}
+

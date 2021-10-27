@@ -1,7 +1,7 @@
 package edu.cmu.cs214.hw3.models;
 
 import edu.cmu.cs214.hw3.cards.God;
-import edu.cmu.cs214.hw3.utils.ConfigureMetadata;
+import edu.cmu.cs214.hw3.utils.Configurator;
 import edu.cmu.cs214.hw3.utils.RoundAction;
 import edu.cmu.cs214.hw3.utils.WorkerType;
 
@@ -12,13 +12,19 @@ public class Game {
     private Player playerA;
     private Player playerB;
     private Player currentPlayer;
+    private final Configurator configurator;
     private boolean isRunning = false;
     private RoundAction roundAction;
-    private ConfigureMetadata configurator;
+    private String message;
 
     public Game() {
         this.board = new Board();
-        this.configurator = new ConfigureMetadata(board);
+        this.roundAction = new RoundAction();
+        this.configurator = new Configurator(board);
+    }
+
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
     public Player getOpponentPlayer() {
@@ -28,6 +34,10 @@ public class Game {
     public Board getBoard() {
         return this.board;
     }
+
+    public String getMessage() { return this.message; }
+
+    public boolean getIsRunning() { return this.isRunning; }
     /**
      * Initialize the game with two players and choose a starting player.
      *
@@ -37,7 +47,7 @@ public class Game {
      */
     public boolean initGame(String nameA, String nameB) {
         if(nameA == null || nameB == null) {
-            System.out.println("Sorry, game needs at least 2 players to start.");
+            message = "Sorry, game needs at least 2 players to start.";
             return false;
         }
 
@@ -45,7 +55,6 @@ public class Game {
         playerB = new Player(nameB);
 
         currentPlayer = playerA;
-        configurator.initCellMetadata();
         return true;
     }
 
@@ -56,24 +65,19 @@ public class Game {
      * @param godNameB Name of the god chosen by the second player
      * @return True if gods are successfully initialized; False otherwise
      */
-    public boolean chooseGod(String godNameA, String godNameB) {
+    public boolean chooseGod(String godNameA, String godNameB) throws Exception {
         String basePath = "edu.cmu.cs214.hw3.cards.";
         God godA, godB;
 
-        try {
-            String classNameA = basePath + godNameA;
-            String classNameB = basePath + godNameB;
-            godA = (God) Class.forName(classNameA).getDeclaredConstructor().newInstance();
-            godB= (God) Class.forName(classNameB).getDeclaredConstructor().newInstance();
-            currentPlayer.setGod(godA);
-            getOpponentPlayer().setGod(godB);
+        String classNameA = basePath + godNameA;
+        String classNameB = basePath + godNameB;
+        godA = (God) Class.forName(classNameA).getDeclaredConstructor().newInstance();
+        godB= (God) Class.forName(classNameB).getDeclaredConstructor().newInstance();
+        currentPlayer.setGod(godA);
+        getOpponentPlayer().setGod(godB);
 
-            configurator.matchPickStartingPositionURL();
-            return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
+        configurator.matchPickStartingPositionURL();
+        return true;
     }
 
     /**
@@ -83,7 +87,6 @@ public class Game {
      * @return True if worker can be placed on this position; false otherwise
      */
     public boolean pickStartingPosition(int[] position) {
-        isRunning = true;
 
         boolean success = true;
         Worker workerA = currentPlayer.getWorkerByType(WorkerType.TYPE_A);
@@ -94,7 +97,7 @@ public class Game {
         // Validation check for only allowing picking four workers in total
         if(workerA.getCurPosition() != null && workerB.getCurPosition() != null
             && workerOA.getCurPosition() != null && workerOB.getCurPosition() != null) {
-            System.out.println("All workers are set. game is ready to go! Enjoy!");
+            message = "All workers are set. game is ready to go! Enjoy!";
             return true;
         }
 
@@ -105,14 +108,15 @@ public class Game {
         }
 
         if(!success) {
-            System.out.println("Sorry, worker cannot stands on an occupied space.");
+            message = "Sorry, worker cannot stands on an occupied space.";
             return false;
         }
 
         if (workerA.getCurPosition() != null && workerB.getCurPosition() != null) {
             takeTurns();
             if (workerOA.getCurPosition() != null && workerOB.getCurPosition() != null) {
-                configurator.matchRoundURL();
+                configurator.matchChooseWorker();
+                isRunning = true;
             }
         }
         return true;
@@ -124,7 +128,7 @@ public class Game {
         Cell curCell = board.getCell(curPos[0], curPos[1]);
         Worker worker = currentPlayer.getWorkerByPosition(curCell);
         if(worker == null) {
-            System.out.println("Please choosing a worker to start moving!");
+            message = "Please choosing a worker to start moving!";
             return null;
         }
         roundAction.setRoundWorker(worker);
@@ -151,9 +155,9 @@ public class Game {
 
         if(possibleMoves.size() == 0 || !possibleMoves.contains(moveTo)) {
             // If moving fails, choose another cell to move to
-            System.out.println("Oops! You (" + currentPlayer.getName() +
+            message = "Oops! You (" + currentPlayer.getName() +
                     ") cannot move to this cell [" + movePos[0] + ", " +
-                    movePos[1] +"].");
+                    movePos[1] +"].";
             return false;
         }
 
@@ -181,9 +185,9 @@ public class Game {
 
         if(possibleBuilds.size() == 0 || !possibleBuilds.contains(buildOn)) {
             // If moving fails, choose another cell to move to
-            System.out.println("Sorry! You (" + currentPlayer.getName() +
+            message = "Sorry! You (" + currentPlayer.getName() +
                     ") cannot build on this cell [" + buildPos[0] + ", "
-                    + buildPos[1] + "].");
+                    + buildPos[1] + "].";
             return false;
         }
 
@@ -195,86 +199,30 @@ public class Game {
     public void takeTurns() {
         if (currentPlayer == null) return;
         currentPlayer = (currentPlayer == playerA) ? playerB : playerA;
+        roundAction = new RoundAction();
     }
 
 
     public Player getWinner() {
         Player winner = null;
-        if (playerA.isWinner())
+
+        // After move, check if worker wins
+        roundAction.getRoundWorker().checkIfWin();
+        // After build, check if worker loses
+        if (roundAction.getRoundPossibleBuilds() != null &&
+                roundAction.getRoundPossibleBuilds().size() == 0) {
+            getOpponentPlayer().setIsWinner();
+            winner = getOpponentPlayer();
+        }
+        else if (playerA.isWinner())
             winner =  playerA;
         else if (playerB.isWinner())
             winner =  playerB;
 
         if (winner != null){
             isRunning = false;
-            System.out.println("Congratulation! " + winner.getName() + " is the winner!");
+            message = "Congratulation! " + winner.getName() + " is the winner!";
         }
         return winner;
     }
-//    public boolean hitRound(int[] curPos, int[] movePos, int[] buildPos) {
-//
-//        Cell moveTo = game.getBoard().getCell(movePos[0], movePos[1]);
-//        // Check if move is valid and update game
-//        boolean moveSuccess = canMove(worker, moveTo);
-//        if(!moveSuccess) {
-//            // If moving fails, choose another cell to move to
-//            System.out.println("Oops! You (" + game.getCurrentPlayer().getName() +
-//                    ") cannot move to this cell [" + movePos[0] + ", " +
-//                    movePos[1] +"].");
-//            return false;
-//        }
-//        currentGod.doMove(worker, moveTo, game);
-//
-//        worker.checkIfWin();
-//        if(getWinner() != null) return true;
-//
-//        Cell buildOn = game.getBoard().getCell(buildPos[0], buildPos[1]);
-//        // Check if build is valid and update game
-//        boolean canBuild = canBuild(worker, buildOn);
-//        if(!canBuild) {
-//            // If moving fails, choose another cell to move to
-//            System.out.println("Sorry! You (" + game.getCurrentPlayer().getName() +
-//                    ") cannot build on this cell [" + buildPos[0] + ", "
-//                    + buildPos[1] + "].");
-//            return false;
-//        }
-//        currentGod.doBuild(buildOn);
-//
-//        if(getWinner() != null) return true;
-//
-//        game.takeTurns();
-//        return true;
-//    }
-
-
-
-//    public boolean canMove(Worker worker, Cell moveTo) {
-//        God currentGod = game.getCurrentPlayer().getGod();
-//        God opponentGod = game.getNextPlayer().getGod();
-//        List<Cell> movableCells = currentGod.getMovableCells(worker, game);
-//        // Apply opponent's power from last round
-//        movableCells = opponentGod.applyOpponentPowerToMove(movableCells, worker);
-//
-//        if(!movableCells.contains(moveTo)) return false;
-//        return true;
-//    }
-
-
-//    public boolean canBuild(Worker worker, Cell buildOn) {
-//        God currentGod = game.getCurrentPlayer().getGod();
-//        God opponentGod = game.getNextPlayer().getGod();
-//
-//        List<Cell> neighbors = game.getBoard().getNeighbors(worker.getCurPosition());
-//        List<Cell> buildableCells = currentGod.getBuildableCells(neighbors);
-//        // Apply opponent's power from last round
-//        buildableCells = opponentGod.applyOpponentPowerToBuild(buildableCells);
-//
-//        if(buildableCells.size() == 0) {
-//            game.getNextPlayer().setIsWinner();
-//            return false;
-//        }
-//
-//        if(!buildableCells.contains(buildOn)) return false;
-//        return true;
-//    }
 }

@@ -7,7 +7,7 @@ import edu.cmu.cs214.hw3.models.Worker;
 import java.util.List;
 
 public class Demeter extends God {
-    // Keep a private field to record if can build a second time
+    // Keep a private field to record if it can build a second time
     private Cell oldPosition = null;
 
     @Override
@@ -28,6 +28,10 @@ public class Demeter extends God {
         } else {
             oldPosition = null;
         }
+    }
 
+    @Override
+    public boolean canAdditionalBuild() {
+        return true;
     }
 }

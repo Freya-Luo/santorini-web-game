@@ -14,16 +14,16 @@ public class Athena extends God {
         super.doMove(worker, moveTo, game);
 
         if (moveTo.getHeight() > oldPosition.getHeight()) {
-            setUsePowerToMove();
+            setUsePowerToOpponent();
         } else {
-            setNotUsePowerToMove();
+            setNotUsePowerToOpponent();
         }
     }
 
      @Override
      public List<Cell> applyOpponentPowerToMove(List<Cell> possibleCells, Worker worker) {
         // Apply Athena God Rule;
-         if (ifUsePowerToMove()) {
+         if (ifUsePowerToOpponent()) {
              int currentHeight = worker.getCurPosition().getHeight();
              possibleCells.removeIf(movable -> currentHeight < movable.getHeight());
          }

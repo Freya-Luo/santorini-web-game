@@ -3,14 +3,11 @@ package edu.cmu.cs214.hw3.utils;
 import edu.cmu.cs214.hw3.models.Board;
 import edu.cmu.cs214.hw3.models.Cell;
 
-public class ConfigureMetadata {
+public class Configurator {
     private Board board;
 
-    public ConfigureMetadata(Board board) {
+    public Configurator(Board board) {
         this.board = board;
-    }
-
-    public void initCellMetadata() {
         for(Cell[] cellRow: board.getAllCells()) {
             for(Cell cell: cellRow) {
                 String link =  "/game?x=" + cell.getX() + "&y=" + cell.getY();
@@ -32,11 +29,15 @@ public class ConfigureMetadata {
         changeCellURL("/game?", "/pickingStartingPosition?");
     }
 
-    public void matchRoundURL() {
+    public void matchChooseWorker() {
         changeCellURL("/pickingStartingPosition?", "/round?");
     }
 
-    public void matchChooseWorker() {
+    public void matchRoundMove() {
+        changeCellURL("?", "/move?");
+    }
 
+    public void matchRoundBuild() {
+        changeCellURL("/move?", "/build?");
     }
 }

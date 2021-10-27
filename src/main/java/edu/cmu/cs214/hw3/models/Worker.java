@@ -12,10 +12,6 @@ public class Worker {
         this.curPosition = null;
     }
 
-    public WorkerType getType() {
-        return type;
-    }
-
     public Cell getCurPosition() {
         return curPosition;
     }

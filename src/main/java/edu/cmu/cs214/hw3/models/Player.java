@@ -64,6 +64,9 @@ public class Player {
     }
 
     public Worker getWorkerByPosition(Cell pos) {
+        if(workerA.getCurPosition() == null || workerB.getCurPosition() == null) {
+            return null;
+        }
         if (workerA.getCurPosition().isEqual(pos)) {
             return workerA;
         }
