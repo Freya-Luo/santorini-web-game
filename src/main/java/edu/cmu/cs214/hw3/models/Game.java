@@ -115,7 +115,7 @@ public class Game {
         if (workerA.getCurPosition() != null && workerB.getCurPosition() != null) {
             takeTurns();
             if (workerOA.getCurPosition() != null && workerOB.getCurPosition() != null) {
-                configurator.matchChooseWorker();
+                configurator.matchChooseWorkerURL();
                 isRunning = true;
             }
         }
@@ -145,6 +145,7 @@ public class Game {
         movableCells = opponentGod.applyOpponentPowerToMove(movableCells, roundWorker);
 
         roundAction.setRoundPossibleMoves(movableCells);
+        configurator.matchRoundMoveURL();
         return movableCells;
     }
 
@@ -176,6 +177,7 @@ public class Game {
         buildableCells = opponentGod.applyOpponentPowerToBuild(buildableCells);
 
         roundAction.setRoundPossibleBuilds(buildableCells);
+        configurator.matchRoundBuildURL();
         return buildableCells;
     }
 

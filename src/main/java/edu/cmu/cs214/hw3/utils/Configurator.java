@@ -29,15 +29,15 @@ public class Configurator {
         changeCellURL("/game?", "/pickingStartingPosition?");
     }
 
-    public void matchChooseWorker() {
+    public void matchChooseWorkerURL() {
         changeCellURL("/pickingStartingPosition?", "/round?");
     }
 
-    public void matchRoundMove() {
+    public void matchRoundMoveURL() {
         changeCellURL("?", "/move?");
     }
 
-    public void matchRoundBuild() {
+    public void matchRoundBuildURL() {
         changeCellURL("/move?", "/build?");
     }
 }

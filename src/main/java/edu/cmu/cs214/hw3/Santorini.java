@@ -16,7 +16,7 @@ import java.io.IOException;
  *  => call getWinner(), if not -> computeBuildableCells() (check if size == 0, lose)
  * 7) "/round/build?x=&y=" => x, y -> int[] buildPos => roundBuild(buildPos) if fail (redirect to another cell), otherwise
  *  => check if canAdditionalBuild() -> no, takeTurns() => yes render UI
- *     7.1) "/round/build?again=" again => yes -> 7); no -> takeTurns()
+ *     7.1) again => yes -> 7); no -> takeTurns()
  */
 public final class Santorini{
     // Game setup
