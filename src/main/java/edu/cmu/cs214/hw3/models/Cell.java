@@ -82,11 +82,25 @@ public class Cell {
         return height - from.getHeight() <= 1;
     }
 
-    public void setMetadata(String avatar, String link, String cssClass) {
-        this.avatar = avatar;
+    public void setLink(String link) {
         this.link = link;
-        this.cssClass = cssClass;
+    }
+
+    public void setAvatar(String avatar) {
+        this.avatar = avatar;
+    }
+    public void setCssClass(String css) {
+        this.cssClass = css;
     }
 
     public String getLink() {return this.link;}
+
+    public String getAvatar() {return this.avatar;}
+
+    public String getCssClass() {return this.cssClass;}
+
+    public void clearStyle() {
+        this.avatar = "";
+        this.cssClass = "";
+    }
 }
