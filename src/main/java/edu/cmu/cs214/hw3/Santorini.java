@@ -67,6 +67,13 @@ public final class Santorini extends NanoHTTPD {
                 int[] pos = parsePos(params.get("x"), params.get("y"));
                 this.game.pickStartingPosition(pos);
             }
+            else if (uri.equals("/round")) {
+                int[] curPos = parsePos(params.get("x"), params.get("y"));
+                this.game.chooseWorker(curPos);
+                if (this.game.getRoundAction().getRoundWorker() != null) {
+                    this.game.computeMovableCells();
+                }
+            }
             else if (uri.equals("/round/move")) {
                 int[] moveTo = parsePos(params.get("x"), params.get("y"));
                 boolean success = this.game.roundMove(moveTo);
@@ -79,15 +86,16 @@ public final class Santorini extends NanoHTTPD {
                 }
             }
             else if (uri.equals("/round/build")) {
-                System.out.println(params.get("again"));
                 if (params.get("again") != null) {
                     if(params.get("again").equals("No")) {
+                        this.game.getCurrentPlayer().getGod().setAns(params.get("again"));
                         this.game.takeTurns();
                     } else {
-
+                        this.game.getCurrentPlayer().getGod().setAns(params.get("again"));
+                        this.game.computeBuildableCells();
+                        this.game.checkWinner();
                     }
                 } else {
-                    if (params.get("x") != null && params.get("y") != null) {
                         int[] buildOn = parsePos(params.get("x"), params.get("y"));
                         boolean success = this.game.roundBuild(buildOn);
                         // check if can do additional build
@@ -99,16 +107,10 @@ public final class Santorini extends NanoHTTPD {
                                 this.game.takeTurns();
                             }
                         }
-                    }
+
                 }
             }
-            else if (uri.equals("/round")) {
-                int[] curPos = parsePos(params.get("x"), params.get("y"));
-                this.game.chooseWorker(curPos);
-                if (this.game.getRoundAction().getRoundWorker() != null) {
-                    this.game.computeMovableCells();
-                }
-            }
+
             // Extract the view-specific data from the game and apply it to the template.
             GameState status = GameState.forGame(this.game);
             String HTML = this.template.apply(status);

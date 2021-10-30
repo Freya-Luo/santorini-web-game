@@ -90,4 +90,6 @@ public abstract class God {
     public List<Cell> applyOpponentPowerToBuild(List<Cell> buildableCells) {
         return buildableCells;
     }
+
+    public void setAns(String ans) {};
 }
