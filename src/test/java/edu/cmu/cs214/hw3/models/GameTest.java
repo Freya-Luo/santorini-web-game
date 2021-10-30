@@ -83,7 +83,7 @@ public class GameTest {
             game.pickStartingPosition(new int[]{0, 3});
             boolean success = game.pickStartingPosition(new int[]{4, 2});
 
-            assertTrue(success);
+            assertFalse(success);
             assertTrue(workerFA.getCurPosition().isEqual(new Cell(1, 2)));
             assertTrue(workerFB.getCurPosition().isEqual(new Cell(2, 3)));
             assertTrue(workerYA.getCurPosition().isEqual(new Cell(3, 2)));
@@ -148,25 +148,26 @@ public class GameTest {
 
         @Test
         public void testChooseWorkerWithCurrentPlayer() {
-            Worker currentWorker = game.chooseWorker(new int[] {2, 3});
-            Worker workerFB = game.getCurrentPlayer().getWorkerByType(WorkerType.TYPE_B);
+            game.chooseWorker(new int[] {2, 3});
+            Worker currentWorker = game.getRoundAction().getRoundWorker();
 
+            Worker workerFB = game.getCurrentPlayer().getWorkerByType(WorkerType.TYPE_B);
             assertEquals(currentWorker, workerFB);
         }
 
         @Test
         public void testChooseWorkerWithOpponentWorker() {
-            Worker currentWorker = game.chooseWorker(new int[] {3, 2});
+            boolean success = game.chooseWorker(new int[] {3, 2});
 
-            assertNull(currentWorker);
+            assertFalse(success);
             assertThat(game.getMessage().trim(), is("Please choosing a worker to start moving!"));
         }
 
         @Test
         public void testChooseWorkerWithInvalidPosition() {
-            Worker currentWorker = game.chooseWorker(new int[] {3, 3});
+            boolean success = game.chooseWorker(new int[] {3, 3});
 
-            assertNull(currentWorker);
+            assertFalse(success);
             assertThat(game.getMessage().trim(), is("Please choosing a worker to start moving!"));
         }
 
@@ -197,7 +198,8 @@ public class GameTest {
         @Test
         public void testRoundMoveWithValidMove() {
             Board board = game.getBoard();
-            Worker currentWorker = game.chooseWorker(new int[] {2, 3});
+            game.chooseWorker(new int[] {2, 3});
+            Worker currentWorker = game.getRoundAction().getRoundWorker();
 
             game.computeMovableCells();
             boolean success = game.roundMove(new int[]{1, 3});
@@ -212,7 +214,8 @@ public class GameTest {
         @Test
         public void testRoundMoveWithInValidMove() {
             Board board = game.getBoard();
-            Worker currentWorker = game.chooseWorker(new int[] {2, 3});
+            game.chooseWorker(new int[] {2, 3});
+            Worker currentWorker = game.getRoundAction().getRoundWorker();
 
             game.computeMovableCells();
             boolean success = game.roundMove(new int[]{1, 4});
@@ -265,11 +268,12 @@ public class GameTest {
         }
 
         @Test
-        public void testGetWinnerByMoveToTop() {
+        public void testCheckWinnerByMoveToTop() {
             Cell curPos = game.getBoard().getCell(2,3);
             for(int i = 0; i < 3; i++) {
                 curPos.addLevel();
             }
+            game.checkWinner();
             Player winner = game.getWinner();
 
             assertEquals("freya", winner.getName());
@@ -277,7 +281,7 @@ public class GameTest {
         }
 
         @Test
-        public void testGetWinnerByFailedBuild() {
+        public void testCheckWinnerByFailedBuild() {
             Board board = game.getBoard();
             board.getCell(1, 2).setOccupied();
             board.getCell(1, 3).setOccupied();
@@ -285,6 +289,7 @@ public class GameTest {
             board.getCell(2, 4).setOccupied();
             board.getCell(3, 4).setOccupied();
             game.computeBuildableCells();
+            game.checkWinner();
             Player winner = game.getWinner();
 
             assertEquals("yoyo", winner.getName());
@@ -292,7 +297,8 @@ public class GameTest {
         }
 
         @Test
-        public void testGetWinnerWithoutWinner() {
+        public void testCheckWinnerWithoutWinner() {
+            game.checkWinner();
             Player winner = game.getWinner();
             assertNull(winner);
         }
