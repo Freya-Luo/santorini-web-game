@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Santorini Monster</title>
+  <style>
+    #board {
+      display: grid;
+      grid-template-columns: repeat(5, auto);
+      background-color: saddlebrown;
+      padding: 10px
+    }
+
+    #popup {
+      font-size: 1.5rem;
+      color: yellow;
+    }
+
+    #labels {
+        display: flex;
+        justify-content: space-between;
+        color: lightcyan;
+        font-size: 1.2rem;
+        font-weight: 700;
+        margin: auto;
+        width: 80vw;
+    }
+
+    .level-label {
+        display: flex;
+        width: 180px;
+        justify-content: space-between;
+    }
+
+    #level1 {
+        background: orange;
+    }
+
+    #level2 {
+       background: green;
+    }
+
+    #level3 {
+       background: yellow;
+    }
+
+    #level4 {
+       background: pink;
+    }
+
+    h2 {
+      font-size: 2.5rem;
+      margin: 10px;
+      color: greenyellow;
+    }
+
+    .cell {
+      background-color: rgba(255, 255, 255, 0.8);
+           border: 1px solid rgba(0, 0, 0, 0.8);
+           padding: 20px;
+           font-size: 30px;
+           height: 15vmin;
+           text-align: center;
+           text-decoration: none;
+    }
+
+    .orange {
+        background-color: orange;
+    }
+
+    .green {
+        background-color: green;
+    }
+
+    .yellow {
+       background-color: yellow;
+    }
+
+    .pink {
+       background-color: pink;
+    }
+
+    #bottombar {
+      height: 5vh;
+    }
+
+    #message_panel {
+      padding: 0px;
+      text-align: center;
+      margin-bottom: 4rem;
+    }
+
+    #message {
+        font-size: 1rem;
+        color: lightyellow;
+    }
+
+    #board_wrapper {
+      width: 70%;
+      margin: auto;
+    }
+
+    #bottombar {
+      margin-top: 1rem;
+      display: flex;
+    }
+
+    #bottombar button {
+      border-radius: 10px;
+      font-size: 1.8rem;
+      margin: auto;
+      border: none;
+      padding: 10px;
+      color: royalblue;
+      background: lightyellow;
+    }
+
+    body {
+      height: 100%;
+      margin: 15px;
+      padding: 0;
+    }
+
+    html {
+      background: royalblue;
+    }
+
+    .playable { background-color: red;}
+  </style>
+</head>
+<body>
+<div id="message_panel">
+    <h2>Spin Master Santorini</h2>
+    <div id="message">
+        {{message}}
+        {{#eq message "Build Again?"}}
+            <form id="actionForm" onsubmit="doOneMoreAction()">
+{{!--                 <input type="submit" value="Yes" onclick="this.form.submitted=this.value;" /> --}}
+{{!--                 <input type="submit" value="No" onclick="this.form.submitted=this.value;" /> --}}
+                <input id="choice" type="text" name="again"/>
+                <button type="submit">OK</button>
+            </form>
+        {{/eq}}
+    </div>
+{{!--     <div id="popup"> --}}
+{{!--         <form id="form" onsubmit="hitNextStep()"></form> --}}
+{{!--     </div> --}}
+    <div id="labels">
+        <div class="level-label"><span>Level 1: </span><div id="level1" style="height: 50px; width: 100px;"></div></div>
+        <div class="level-label"><span>Level 2: </span><div id="level2" style="height: 50px; width: 100px;"></div></div>
+        <div class="level-label"><span>Level 3: </span><div id="level3" style="height: 50px; width: 100px;"></div></div>
+        <div class="level-label"><span>Level 4: </span><div id="level4" style="height: 50px; width: 100px;"></div></div>
+    </div>
+</div>
+<div id="board_wrapper">
+  <div id="board">
+    {{#each cells}}
+      {{#each this}}
+        {{#if link}}
+            <a href={{link}}><div class="cell {{cssClass}}">{{avatar}}</div></a>
+        {{/if}}
+      {{/each}}
+    {{/each}}
+  </div>
+  <div id="bottombar">
+    <div id="popup">
+       <form id="form" onsubmit="hitNextStep()"></form>
+    </div>
+    <button onclick="nextStep()">
+        {{phase}}
+    </button>
+  </div>
+</div>
+</body>
+<script type="text/javascript">
+
+function nextStep() {
+    var phase = "{{phase}}";
+    const form = document.getElementById("form");
+
+    if (phase === "start game") {
+        form.innerHTML = `
+            <label for="playerA_name">PlayerA name:</label>
+            <input id="playerA_name" type="text" name="nameA" style="margin-right: 15px;"/>
+            <label for="playerB_name">PlayerB name:</label>
+            <input id="playerB_name" type="text" name="nameB"/>
+            <button type="submit">Start</button>
+        `
+    } else if (phase === "choose god") {
+        form.innerHTML = `
+           <label for="godA">Choose playerA god:</label>
+           <select id="godA" name="godA" style="margin-right: 15px;">
+             <option value="Athena">Athena</option>
+             <option value="Demeter">Demeter</option>
+             <option value="Minotaur">Minotaur</option>
+             <option value="Pan">Pan</option>
+           </select>
+           <label for="godB">Choose playerB god:</label>
+           <select id="godB" name="godB">
+              <option value="Athena">Athena</option>
+              <option value="Demeter">Demeter</option>
+              <option value="Minotaur">Minotaur</option>
+              <option value="Pan">Pan</option>
+           </select>
+           <button type="submit">OK</button>
+        `
+    }
+}
+
+function hitNextStep() {
+    var phase = "{{phase}}";
+    var actionURL = "/";
+
+    if (phase === "start game") {
+        actionURL = "/initGame?nameA=" + document.getElementById("playerA_name").value + "&nameB=" + document.getElementById("playerB_name").value
+    } else if (phase === "choose god") {
+        actionURL = "/chooseGod?godA=" + document.getElementById("godA").value + "&godB=" + document.getElementById("godB").value
+    }
+    var newForm = document.getElementById("form")
+    newForm.action = actionURL
+}
+
+function doOneMoreAction() {
+    //var actionForm = document.getElementById("actionForm");
+    var actionURL = "/round/build?again="+ document.getElementById("choice").value;
+    console.log(actionURL, "lll");
+    actionForm.action = actionURL;
+
+}
+</script>
+</html>
