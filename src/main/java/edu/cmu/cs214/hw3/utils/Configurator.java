@@ -11,7 +11,7 @@ public class Configurator {
         for(Cell[] cellRow: board.getAllCells()) {
             for(Cell cell: cellRow) {
                 String link =  "/game?x=" + cell.getX() + "&y=" + cell.getY();
-                cell.setMetadata("", link, "base");
+                cell.setLink(link);
             }
         }
     }
@@ -20,7 +20,7 @@ public class Configurator {
         for(Cell[] cellRow: board.getAllCells()) {
             for(Cell cell: cellRow) {
                 String link =  cell.getLink().replace(oldURL, newURL);
-                cell.setMetadata("", link, "base");
+                cell.setLink(link);
             }
         }
     }
@@ -40,4 +40,9 @@ public class Configurator {
     public void matchRoundBuildURL() {
         changeCellURL("/move?", "/build?");
     }
+
+    public void matchTakeTurnURL() {
+        changeCellURL("/build?", "?");
+    }
+
 }

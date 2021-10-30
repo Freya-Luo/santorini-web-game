@@ -13,14 +13,17 @@ public class Game {
     private Player playerB;
     private Player currentPlayer;
     private final Configurator configurator;
-    private boolean isRunning = false;
     private RoundAction roundAction;
     private String message;
+    private String phase;
+    private boolean isRunning = false;
+    private Player winner = null;
 
     public Game() {
         this.board = new Board();
         this.roundAction = new RoundAction();
         this.configurator = new Configurator(board);
+        this.phase = "start game";
     }
 
     public Player getCurrentPlayer() {
@@ -37,7 +40,16 @@ public class Game {
 
     public String getMessage() { return this.message; }
 
+    public String getPhase() { return this.phase; }
+
+    public void setMessage(String newMsg) { this.message = newMsg; }
+
+    public RoundAction getRoundAction() { return this.roundAction; }
+
     public boolean getIsRunning() { return this.isRunning; }
+
+    public Player getWinner() { return this.winner; }
+
     /**
      * Initialize the game with two players and choose a starting player.
      *
@@ -51,10 +63,11 @@ public class Game {
             return false;
         }
 
-        playerA = new Player(nameA);
-        playerB = new Player(nameB);
+        playerA = new Player("A" + nameA);
+        playerB = new Player("B" + nameB);
 
         currentPlayer = playerA;
+        phase = "choose god";
         return true;
     }
 
@@ -71,12 +84,17 @@ public class Game {
 
         String classNameA = basePath + godNameA;
         String classNameB = basePath + godNameB;
+        if (classNameA.equals(classNameB)) {
+            message = "Sorry, you cannot choose the same god.";
+            return false;
+        }
         godA = (God) Class.forName(classNameA).getDeclaredConstructor().newInstance();
         godB= (God) Class.forName(classNameB).getDeclaredConstructor().newInstance();
         currentPlayer.setGod(godA);
         getOpponentPlayer().setGod(godB);
 
         configurator.matchPickStartingPositionURL();
+        phase = "running";
         return true;
     }
 
@@ -98,7 +116,7 @@ public class Game {
         if(workerA.getCurPosition() != null && workerB.getCurPosition() != null
             && workerOA.getCurPosition() != null && workerOB.getCurPosition() != null) {
             message = "All workers are set. game is ready to go! Enjoy!";
-            return true;
+            return false;
         }
 
         if(workerA.getCurPosition() == null) {
@@ -122,17 +140,17 @@ public class Game {
         return true;
     }
 
-    public Worker chooseWorker(int[] curPos) {
-        if (!isRunning) return null;
+    public boolean chooseWorker(int[] curPos) {
+        if (!isRunning) return false;
 
         Cell curCell = board.getCell(curPos[0], curPos[1]);
         Worker worker = currentPlayer.getWorkerByPosition(curCell);
         if(worker == null) {
             message = "Please choosing a worker to start moving!";
-            return null;
+            return false;
         }
         roundAction.setRoundWorker(worker);
-        return worker;
+        return true;
     }
 
     public List<Cell> computeMovableCells() {
@@ -146,6 +164,10 @@ public class Game {
 
         roundAction.setRoundPossibleMoves(movableCells);
         configurator.matchRoundMoveURL();
+
+        if(movableCells.size() == 0) {
+            message = "No available moves, please try the other worker...";
+        }
         return movableCells;
     }
 
@@ -199,15 +221,14 @@ public class Game {
     }
 
     public void takeTurns() {
+        configurator.matchTakeTurnURL();
         if (currentPlayer == null) return;
         currentPlayer = (currentPlayer == playerA) ? playerB : playerA;
         roundAction = new RoundAction();
     }
 
 
-    public Player getWinner() {
-        Player winner = null;
-
+    public void checkWinner() {
         // After move, check if worker wins
         roundAction.getRoundWorker().checkIfWin();
         // After build, check if worker loses
@@ -224,7 +245,7 @@ public class Game {
         if (winner != null){
             isRunning = false;
             message = "Congratulation! " + winner.getName() + " is the winner!";
+
         }
-        return winner;
     }
 }

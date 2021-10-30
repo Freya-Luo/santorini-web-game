@@ -64,13 +64,12 @@ public class Player {
     }
 
     public Worker getWorkerByPosition(Cell pos) {
-        if(workerA.getCurPosition() == null || workerB.getCurPosition() == null) {
-            return null;
-        }
-        if (workerA.getCurPosition().isEqual(pos)) {
+        if (workerA.getCurPosition() != null
+                && workerA.getCurPosition().isEqual(pos)) {
             return workerA;
         }
-        if (workerB.getCurPosition().isEqual(pos)) {
+        if (workerB.getCurPosition() != null
+                && workerB.getCurPosition().isEqual(pos)) {
             return workerB;
         }
         return null;
