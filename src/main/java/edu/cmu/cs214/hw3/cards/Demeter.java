@@ -10,7 +10,7 @@ public class Demeter extends God {
     // Keep a private field to record if it can build a second time
     private Cell oldPosition = null;
     private boolean notAskYet = true;
-    private String ans = "No";
+    private boolean isAnsYes = false;
 
     @Override
     public List<Cell> getBuildableCells(Worker worker, Game game) {
@@ -27,36 +27,35 @@ public class Demeter extends God {
         buildOn.addLevel();
         oldPosition = buildOn;
 
-        // Only If player choose "Yes" && oldPosition is null, then set the oldPosition
-        if (!notAskYet && this.ans.equals("Yes")) {
+        // If player choose "Yes", then set for the next round
+        if (!notAskYet && !isAnsYes) {
             oldPosition = null;
         }
     }
 
     @Override
     public boolean canAdditionalBuild() {
-        // Has already made choice in this turn, can only make choice once
-        if (ans.equals("Yes")) {
+        // Can only make choice once
+        if (isAnsYes) {
             // set for the next round
             notAskYet = true;
-            ans = "No";
+            isAnsYes = false;
             return false;
         }
 
         if (notAskYet) {
             notAskYet = false;
-            return true;
         }
-        return false;
+        return true;
     }
 
     @Override
     public void setAns(String ans) {
-        this.ans = ans;
-        if (ans.equals("No")) {
+        this.isAnsYes = ans.equals("Yes");
+        // Can only make choice once
+        if (!isAnsYes) {
             oldPosition = null;
             notAskYet = true;
-            this.ans = "No";
         }
     }
 

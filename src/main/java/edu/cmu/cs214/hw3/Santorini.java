@@ -17,7 +17,7 @@ import java.util.Map;
  * 4) "/round?x=&y=" => x, y -> int[] curPos => chooseWorker(curPos) -> computeMovableCells() (check if size == 0, redirect to choose another one)
  * 5) "/round/move?x=&y=" => x, y -> int[] movePos => roundMove(movePos) -> if fail (choose another cell, otherwise continue)
  *  => call getWinner(), if not -> computeBuildableCells() (check if size == 0, lose)
- * 7) "/round/build?x=&y=&again=" => x, y -> int[] buildPos => roundBuild(buildPos) if fail (redirect to another cell), otherwise
+ * 7) "/round/build?x=&y=" => x, y -> int[] buildPos => roundBuild(buildPos) if fail (redirect to another cell), otherwise
  *  => check if canAdditionalBuild() -> no, takeTurns() => yes render UI
  *     7.1) again => yes -> 7); no -> takeTurns()
  */
@@ -87,27 +87,28 @@ public final class Santorini extends NanoHTTPD {
             }
             else if (uri.equals("/round/build")) {
                 if (params.get("again") != null) {
+                    // If worker do not want to do an additional build
                     if(params.get("again").equals("No")) {
                         this.game.getCurrentPlayer().getGod().setAns(params.get("again"));
                         this.game.takeTurns();
                     } else {
+                        // If worker want to do an additional build
                         this.game.getCurrentPlayer().getGod().setAns(params.get("again"));
                         this.game.computeBuildableCells();
                         this.game.checkWinner();
                     }
                 } else {
-                        int[] buildOn = parsePos(params.get("x"), params.get("y"));
-                        boolean success = this.game.roundBuild(buildOn);
-                        // check if can do additional build
-                        if (success) {
-                            boolean canAdditionalBuild = this.game.getCurrentPlayer().getGod().canAdditionalBuild();
-                            if (canAdditionalBuild) {
-                                this.game.setMessage("Build Again?");
-                            } else {
-                                this.game.takeTurns();
-                            }
+                    int[] buildOn = parsePos(params.get("x"), params.get("y"));
+                    boolean success = this.game.roundBuild(buildOn);
+                    // check if worker can do additional build
+                    if (success) {
+                        boolean canAdditionalBuild = this.game.getCurrentPlayer().getGod().canAdditionalBuild();
+                        if (canAdditionalBuild) {
+                           this.game.setMessage("Build Again?");
+                        } else {
+                            this.game.takeTurns();
                         }
-
+                    }
                 }
             }
 

@@ -131,20 +131,17 @@
 <body>
 <div id="message_panel">
     <h2>Spin Master Santorini</h2>
-    <div id="message">
-        {{message}}
         {{#eq message "Build Again?"}}
-            <form id="actionForm" onsubmit="doOneMoreAction()">
-{{!--                 <input type="submit" value="Yes" onclick="this.form.submitted=this.value;" /> --}}
-{{!--                 <input type="submit" value="No" onclick="this.form.submitted=this.value;" /> --}}
-                <input id="choice" type="text" name="again"/>
-                <button type="submit">OK</button>
+            {{message}}
+            <form id="actionForm" onsubmit="doOneMoreAction()" class="build-popup">
+                <input type="submit" name="again" value="Yes" onclick="this.form.submitted=this.value;" />
+                <input type="submit" name="again" value="No" onclick="this.form.submitted=this.value;" />
             </form>
+        {{else}}
+          <div id="message">
+                  {{message}}
+          </div>
         {{/eq}}
-    </div>
-{{!--     <div id="popup"> --}}
-{{!--         <form id="form" onsubmit="hitNextStep()"></form> --}}
-{{!--     </div> --}}
     <div id="labels">
         <div class="level-label"><span>Level 1: </span><div id="level1" style="height: 50px; width: 100px;"></div></div>
         <div class="level-label"><span>Level 2: </span><div id="level2" style="height: 50px; width: 100px;"></div></div>
@@ -221,9 +218,7 @@ function hitNextStep() {
 }
 
 function doOneMoreAction() {
-    //var actionForm = document.getElementById("actionForm");
-    var actionURL = "/round/build?again="+ document.getElementById("choice").value;
-    console.log(actionURL, "lll");
+    var actionURL = "/round/build?again="+ document.getElementById("actionForm").submitted;
     actionForm.action = actionURL;
 
 }
