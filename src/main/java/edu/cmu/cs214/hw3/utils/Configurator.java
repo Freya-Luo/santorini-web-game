@@ -8,6 +8,10 @@ public class Configurator {
 
     public Configurator(Board board) {
         this.board = board;
+        initCellURL();
+    }
+
+    public void initCellURL() {
         for(Cell[] cellRow: board.getAllCells()) {
             for(Cell cell: cellRow) {
                 String link =  "/game?x=" + cell.getX() + "&y=" + cell.getY();
