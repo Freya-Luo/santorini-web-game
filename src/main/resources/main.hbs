@@ -11,11 +11,6 @@
       padding: 10px
     }
 
-    #popup {
-      font-size: 1.5rem;
-      color: yellow;
-    }
-
     #labels {
         display: flex;
         justify-content: space-between;
@@ -80,19 +75,36 @@
        background-color: pink;
     }
 
-    #bottombar {
-      height: 5vh;
-    }
-
     #message_panel {
       padding: 0px;
       text-align: center;
-      margin-bottom: 4rem;
+      margin-bottom: 1.2rem;
+    }
+
+    #build_popup {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top: 0;
+        opacity: 0.7;
+        background: grey;
+        z-index: 1000;
+    }
+
+    #build_wrapper {
+        font-size: 2.5rem;
+        color: yellow;
+        font-weight: 600
     }
 
     #message {
-        font-size: 1rem;
-        color: lightyellow;
+        font-size: 1.5rem;
+        color: red;
+        margin-bottom: 1.2rem;
+        font-weight: 600;
     }
 
     #board_wrapper {
@@ -100,25 +112,53 @@
       margin: auto;
     }
 
-    #bottombar {
-      margin-top: 1rem;
-      display: flex;
+    #popup {
+       font-size: 1.5rem;
+       color: yellow;
+       margin-top: 1rem;
+       display: flex;
+       text-align: center;
+       flex-direction: column;
     }
 
-    #bottombar button {
+    #form {
+        margin-bottom: 1rem;
+    }
+
+    #actionForm input{
+        border-radius: 10px;
+        font-size: 1.5rem;
+        padding: 6px;
+    }
+
+
+    button {
       border-radius: 10px;
       font-size: 1.8rem;
       margin: auto;
       border: none;
-      padding: 10px;
+      padding: 5px 10px;
       color: royalblue;
       background: lightyellow;
+    }
+
+    #form_btn {
+        font-size: 1.2rem;
+        padding: 5px;
+    }
+
+    input,
+    select {
+        font-size: 1.3rem;
+        border: none;
+        width: 10vw;
     }
 
     body {
       height: 100%;
       margin: 15px;
       padding: 0;
+      position: relative;
     }
 
     html {
@@ -131,23 +171,27 @@
 <body>
 <div id="message_panel">
     <h2>Spin Master Santorini</h2>
-        {{#eq message "Build Again?"}}
-            {{message}}
-            <form id="actionForm" onsubmit="doOneMoreAction()" class="build-popup">
-                <input type="submit" name="again" value="Yes" onclick="this.form.submitted=this.value;" />
-                <input type="submit" name="again" value="No" onclick="this.form.submitted=this.value;" />
-            </form>
-        {{else}}
-          <div id="message">
-                  {{message}}
-          </div>
-        {{/eq}}
     <div id="labels">
         <div class="level-label"><span>Level 1: </span><div id="level1" style="height: 50px; width: 100px;"></div></div>
         <div class="level-label"><span>Level 2: </span><div id="level2" style="height: 50px; width: 100px;"></div></div>
         <div class="level-label"><span>Level 3: </span><div id="level3" style="height: 50px; width: 100px;"></div></div>
         <div class="level-label"><span>Level 4: </span><div id="level4" style="height: 50px; width: 100px;"></div></div>
     </div>
+    {{#eq message "Build Again?"}}
+        <div id="build_popup">
+            <div id="build_wrapper">
+           {{message}}
+           <form id="actionForm" onsubmit="doOneMoreAction()">
+              <input type="submit" name="again" value="Yes" onclick="this.form.submitted=this.value;" />
+              <input type="submit" name="again" value="No" onclick="this.form.submitted=this.value;" />
+           </form>
+           </div>
+        </div>
+        {{else}}
+           <div id="message">
+              {{message}}
+           </div>
+        {{/eq}}
 </div>
 <div id="board_wrapper">
   <div id="board">
@@ -159,13 +203,12 @@
       {{/each}}
     {{/each}}
   </div>
-  <div id="bottombar">
     <div id="popup">
-       <form id="form" onsubmit="hitNextStep()"></form>
-    </div>
-    <button onclick="nextStep()">
-        {{phase}}
-    </button>
+       <form id="form" onsubmit="hitNextStep()">
+       </form>
+        <button onclick="nextStep()">
+               {{phase}}
+        </button>
   </div>
 </div>
 </body>
@@ -181,7 +224,7 @@ function nextStep() {
             <input id="playerA_name" type="text" name="nameA" style="margin-right: 15px;"/>
             <label for="playerB_name">PlayerB name:</label>
             <input id="playerB_name" type="text" name="nameB"/>
-            <button type="submit">Start</button>
+            <button id="form_btn" type="submit">OK</button>
         `
     } else if (phase === "choose god") {
         form.innerHTML = `
@@ -199,7 +242,7 @@ function nextStep() {
               <option value="Minotaur">Minotaur</option>
               <option value="Pan">Pan</option>
            </select>
-           <button type="submit">OK</button>
+           <button id="form_btn" type="submit">OK</button>
         `
     }
 }
