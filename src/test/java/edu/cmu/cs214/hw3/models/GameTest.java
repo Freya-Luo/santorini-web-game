@@ -6,6 +6,8 @@ import edu.cmu.cs214.hw3.cards.God;
 import edu.cmu.cs214.hw3.utils.WorkerType;
 import org.junit.Before;
 import org.junit.Test;
+import org.junit.experimental.runners.Enclosed;
+import org.junit.runner.RunWith;
 
 import java.util.List;
 
@@ -13,7 +15,7 @@ import static org.junit.Assert.*;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
-
+@RunWith(Enclosed.class)
 public class GameTest {
     public static class TestInitGameAndGods {
         private Game game;
@@ -27,7 +29,7 @@ public class GameTest {
         public void testInitGameWithValidNames() {
             game.initGame("freya", "yoyo");
 
-            assertEquals("freya", game.getCurrentPlayer().getName());
+            assertEquals("freya", game.getCurrentPlayer().getName().substring(1));
         }
 
         @Test
@@ -106,17 +108,17 @@ public class GameTest {
 
         @Test
         public void testPickingStartingPositionWithTakeTurns() {
-            assertEquals("freya", game.getCurrentPlayer().getName());
+            assertEquals("freya", game.getCurrentPlayer().getName().substring(1));
             game.pickStartingPosition(new int[]{1, 2});
             game.pickStartingPosition(new int[]{2, 3});
 
-            assertEquals("yoyo", game.getCurrentPlayer().getName());
+            assertEquals("yoyo", game.getCurrentPlayer().getName().substring(1));
             assertFalse(game.getIsRunning());
 
             game.pickStartingPosition(new int[]{3, 2});
             game.pickStartingPosition(new int[]{0, 3});
 
-            assertEquals("freya", game.getCurrentPlayer().getName());
+            assertEquals("freya", game.getCurrentPlayer().getName().substring(1));
             assertTrue(game.getIsRunning());
         }
     }
@@ -262,9 +264,9 @@ public class GameTest {
 
         @Test
         public void testTakeTurn() {
-            assertEquals("freya", game.getCurrentPlayer().getName());
+            assertEquals("freya", game.getCurrentPlayer().getName().substring(1));
             game.takeTurns();
-            assertEquals("yoyo", game.getCurrentPlayer().getName());
+            assertEquals("yoyo", game.getCurrentPlayer().getName().substring(1));
         }
 
         @Test
@@ -276,7 +278,7 @@ public class GameTest {
             game.checkWinner();
             Player winner = game.getWinner();
 
-            assertEquals("freya", winner.getName());
+            assertEquals("freya", winner.getName().substring(1));
             assertEquals(game.getMessage().trim(), "Congratulation! freya is the winner!");
         }
 
@@ -292,7 +294,7 @@ public class GameTest {
             game.checkWinner();
             Player winner = game.getWinner();
 
-            assertEquals("yoyo", winner.getName());
+            assertEquals("yoyo", winner.getName().substring(1));
             assertEquals(game.getMessage().trim(), "Congratulation! yoyo is the winner!");
         }
 

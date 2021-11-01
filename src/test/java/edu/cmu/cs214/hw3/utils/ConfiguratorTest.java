@@ -48,4 +48,10 @@ public class ConfiguratorTest {
         configurator.matchRoundBuildURL();
         assertEquals(randomCell.getLink(), "/round/build?x=2&y=3");
     }
+
+    @Test
+    public void testFTakeTurnURL() {
+        configurator.matchTakeTurnURL();
+        assertEquals(randomCell.getLink(), "/round?x=2&y=3");
+    }
 }

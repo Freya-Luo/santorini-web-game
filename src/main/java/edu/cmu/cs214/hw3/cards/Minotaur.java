@@ -40,7 +40,8 @@ public class Minotaur extends God {
         Worker opponentWorker = game.getOpponentPlayer().getWorkerByPosition(moveTo);
         if (opponentWorker != null) {
             Cell opponentNewPos = pushOpponentTo(worker.getCurPosition(), moveTo, game);
-            opponentWorker.setCurPosition(opponentNewPos);
+            if (opponentNewPos != null)
+                opponentWorker.setCurPosition(opponentNewPos);
         }
         super.doMove(worker, moveTo, game);
     }

@@ -178,7 +178,7 @@ public class Game {
 
         if(possibleMoves.size() == 0 || !possibleMoves.contains(moveTo)) {
             // If moving fails, choose another cell to move to
-            message = "Oops! You (" + currentPlayer.getName() +
+            message = "Oops! You (" + currentPlayer.getName().substring(1) +
                     ") cannot move to this cell [" + movePos[0] + ", " +
                     movePos[1] +"].";
             return false;
@@ -209,7 +209,7 @@ public class Game {
 
         if(possibleBuilds.size() == 0 || !possibleBuilds.contains(buildOn)) {
             // If moving fails, choose another cell to move to
-            message = "Sorry! You (" + currentPlayer.getName() +
+            message = "Sorry! You (" + currentPlayer.getName().substring(1) +
                     ") cannot build on this cell [" + buildPos[0] + ", "
                     + buildPos[1] + "].";
             return false;
@@ -244,7 +244,7 @@ public class Game {
 
         if (winner != null){
             isRunning = false;
-            message = "Congratulation! " + winner.getName() + " is the winner!";
+            message = "Congratulation! " + winner.getName().substring(1) + " is the winner!";
 
         }
     }
