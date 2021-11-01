@@ -24,15 +24,6 @@ public class PlayerTest {
     }
 
     @Test
-    public void testSetName() {
-        boolean resA = player.setName("");
-        boolean resB = player.setName("Freya Luo");
-
-        assertFalse(resA);
-        assertTrue(resB);
-    }
-
-    @Test
     public void testGetWorkerByType() {
         Worker worker = player.getWorkerByType(WorkerType.TYPE_TEST);
 

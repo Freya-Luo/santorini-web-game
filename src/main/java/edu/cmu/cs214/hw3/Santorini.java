@@ -114,8 +114,8 @@ public final class Santorini extends NanoHTTPD {
 
             // Extract the view-specific data from the game and apply it to the template.
             GameState status = GameState.forGame(this.game);
-            String HTML = this.template.apply(status);
-            return newFixedLengthResponse(HTML);
+            String tHTML = this.template.apply(status);
+            return newFixedLengthResponse(tHTML);
         } catch (Exception e) {
             e.printStackTrace();
             return null;

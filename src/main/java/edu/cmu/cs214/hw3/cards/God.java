@@ -79,9 +79,9 @@ public abstract class God {
         return false;
     }
 
-    public boolean canAdditionalMove() {
-        return false;
-    }
+//    public boolean canAdditionalMove() {
+//        return false;
+//    }
 
     public List<Cell> applyOpponentPowerToMove(List<Cell> movableCells, Worker worker) {
         return movableCells;

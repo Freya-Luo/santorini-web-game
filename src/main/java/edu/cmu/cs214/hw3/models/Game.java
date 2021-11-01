@@ -244,6 +244,7 @@ public class Game {
 
         if (winner != null){
             isRunning = false;
+            configurator.initCellURL();
             message = "Congratulation! " + winner.getName().substring(1) + " is the winner!";
 
         }

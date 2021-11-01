@@ -37,19 +37,6 @@ public class Player {
         this.god = god;
     }
 
-    /**
-     * Set a non-empty name to the player.
-     * @param newName New name
-     * @return True if name is valid and player's name is changed, false otherwise.
-     */
-    public boolean setName(String newName) {
-        if (!newName.equals("")) {
-            name = newName;
-            return true;
-        }
-        return false;
-    }
-
     public Worker[] getAllWorkers() {
         return new Worker[] {workerA, workerB};
     }

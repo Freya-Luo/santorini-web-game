@@ -26,11 +26,11 @@ public class RoundAction {
         return this.roundWorker;
     }
 
-    public  List<Cell> getRoundPossibleMoves() {
+    public List<Cell> getRoundPossibleMoves() {
         return this.roundPossibleMoves;
     }
 
-    public  List<Cell> getRoundPossibleBuilds() {
+    public List<Cell> getRoundPossibleBuilds() {
         return this.roundPossibleBuilds;
     }
 }
