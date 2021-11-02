@@ -31,7 +31,7 @@ public final class Santorini extends NanoHTTPD {
         }
     }
 
-    private final Game game;
+    private Game game;
     private Template template;
 
     public Santorini() throws IOException {
@@ -58,6 +58,7 @@ public final class Santorini extends NanoHTTPD {
             Map<String, String> params = session.getParms();
             this.game.setMessage("");
             if (uri.equals("/initGame")) {
+                this.game = new Game();
                 this.game.initGame(params.get("nameA"), params.get("nameB"));
             }
             else if (uri.equals("/chooseGod")) {

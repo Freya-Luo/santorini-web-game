@@ -62,9 +62,6 @@ public class Game {
             message = "Sorry, game needs at least 2 players to start.";
             return false;
         }
-        // Remove all the previous game status
-        this.roundAction = new RoundAction();
-        this.configurator = new Configurator(board);
 
         playerA = new Player("A" + nameA);
         playerB = new Player("B" + nameB);
@@ -249,7 +246,7 @@ public class Game {
 
         if (winner != null){
             isRunning = false;
-            configurator.initCells();
+            configurator.initCells(); // avoid continually random clicking the board
             phase = "start game";
             message = "Congratulation! " + winner.getName().substring(1) + " is the winner!";
         }
