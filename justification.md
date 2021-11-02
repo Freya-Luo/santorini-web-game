@@ -1,52 +1,37 @@
-### Models
+## Models
 
-Following the game rules, the models corresponding to the real-world objects are `Board`, `Cell`, `Block/Dome`, `Player` and `Worker`. Their associations are listed as following:
+Following the game rules, the models corresponding to the real-world objects are `Board`, `Cell`, `Player` and `Worker`. Their associations are listed as follows:
 
 - 1 `Board`-> (has 5\*5) `Cell`
-- 1 `Cell` -> (has 0/1/2/3, 0/1) `Block/Dome`
 - 1 `Player` -> (has 2 ) `Worker`
 - 1 `Worker` -> (occupies 1) `Cell`
 
-Basically, almost all models above follow the "has-a" modeling technique. With the composition design principle, it is easy to add/change multiple behaviours with dependency injection (/using getters and setters) and also reduce different models coupling.
+Almost all models above follow the "has-a" modeling technique. With the composition design principle, it is easy to add/change multiple behaviors with dependency injection (/using getters and setters) and also reduce different models coupling.
 
-In order to make connections between `Board`, `Player` and `Worker` and also to keep the information and status of players, a `Game` model would be helpful here. In fact, these logic could all be placed in `Board` class, but for the "single responsibility principle", the labor of each object should be divided into reasonable pieces. Then, 2 more associations are added:
 
-- 1 `Game` -> (has 2 ) `Player`
-- 1 `Game` -> (has 1) `Board`
+## Design Pattern
 
-Since the actions that are related to `Block/Dome` are both "Building", this rule can be extracted from other rules and keep its logic inside a `Tower` model. And there is a "trade-off" where all logic in the `Tower` can be directly put in `Cell` class, so the dependencies call will be shorter (e.g. `board.getCell().getTower().addLevel()` in my code, which looks not so good). But again, `Tower` should have a separate class to maintain all the states either for possible future reuse or high cohesion.
+Each model has its own inner states to keep track of and also has to interact with others. Thus, `Module Pattern` should be used to design the base game models. Almost all attributes mentioned above should be labeled as `private` and each module has to expose some `public` methods for the interactions.  
 
-So, six models are sufficient to represent the whole Santorini game. In addition, their responsibilities are straightforward, the logic is stated as below:
+To implement God cards, `Template Method Pattern` would be a good choice. God cards, from the real-world perspective, only change some behaviors of the worker's `move` and `build` actions (or change the game-winning rules) based on the game's core functionalities. With much duplicate logic, we can extra the core logic into an `<<abstract class>> God`, and revise each god's specific power in their subclasses.  
+- Why use `Template Method Pattern`:
+    - Concrete gods only override certain parts of the non-god (`Muggle`) game logic which would be less affected by changes happen to other parts of the logic
+    - Design for reuse -- pull the massive duplicate code into a superclass
+    - Design for understandability -- turn the monolithic non-god behaviors into a series of individual actions in which only some particular steps are extended/modified
+    - Design for extensibility -- introduce new gods without having to change many contexts
+- Downsides:
+    - Some too specific methods in the subclasses need definition in the superclass, which could make it looks heavy
 
-- `Game`: `phase` records the game status, which should be `PREPARING, RUNNING, DONE`; stored `currentPlayer`; `hasWinner` checks if a winner is generated
-- `Board`: `numOfRows` & `numOfCols` specify the size of the board
-- `Cell`: `x` & `y` record its geographic position, and `isOccupied` checks if it contains a `Worker` or a `Dome`
-- `Tower`: `level` records its current height, `hasDome` indicates if it's completed and `top` specifies the max level it can have
-- `Player`: `name` distinguishes 2 players and `isWinner` checks if this player wins the game
-- `Worker`: `type` distinguishes 2 workers a player has; stores its current and previous location in `curPosition & prePosition`
-  - `getMovableCells() & getBuildCells()` give the possible move and build actions that are valid
 
-### Design Pattern
 
-From the above logic, neither `is-a` relation nor overlapped logic exists among these models and associaitions. Besides, each model has their own inner states to keep track of and also has to interact with others.Thus, `Module Pattern` could be a good choice to design this game. Almost all attributes mentioned above should be labeled as `private` and each module has to expose some `public` methods for the interactions.
+## Extensibility
+#### **Gods**
 
-### Logic and Data Flow
+In this game, all the gods do not alter too many things but just some certain behaviors with respect to either `move` or `build` action. The non-god logic `(Muggle.java)` is essentially followed/inherited by each god, and minor differences are implemented. For the future implementation of more gods, they could simply `extends` the abstract `God` class, inherit base methods and add some extra steps/modify the original methods if necessary.   
 
-For the purpose of maintainning low coupling and high cohesion, some conceputal classes are introduced - `GameController` and `ActionController`. Obviously, `GameController` should control the overall game status, players status and board information. And `ActionController` should focus on that 2 specific actions -- "Move" and "Build". With `Controllers`, future user interface and core logic will be decoupled from each other. Although they are coupled to the controllers now, controllers could be served as mediators for the future reuse. In this way, this kind of coupling is less harmful.
+However, the downside of suppressing a default method vis subclass is not much obvious as each god follows the move and build core functionalities(e.g. `setCurPostion()`, `addLevel()`, `computeMovableCells()` and `computeBuildableCells()`...). So, using `Template Method Pattern` could be a reasonable choice for implementing god cards. Also, `Strategy Pattern` could be a candidate. However, with an `interface` instead of a `class`, much duplicate code has to be written in each subtype (concrete god class), which is not good for readability and extensibility.
 
-So, one possible design of data flow could be:
+#### **GUI**
+The implementation of GUI and base game is separated by introducing a controller (`Game.java`) for low coupling and high cohesion between `View` and `Model`. In this way, the whole program is much easier to understand, which further leads to good evolvability -- both UI and core logic are easier to change. This also achieves the design goal of low representational gap. Although the code and dependencies look heavy in `Game`, it actually does not do much work itself, instead it delegates the work to other objects. In this game, `Game` is a relative small interface that served as a mediator, which is quite stable. With this decoupling, `UI` can be easily changed without knowing anything about the domain logic design. In the same way, changes made to the domain logic only affects the controller instead of `UI`.
 
-- `GameController`: has 3 phases to control, which are corresponding to the `phase` in `Game`
-  - `initGame`: initialize 2 players and all other modules; `phase` starts as `PREPARING`
-  - `pickStartingPosition`: each player pick starting positions for 2 workers
-  - `readyGo`: check if all previous steps are correctly, if yes, then set `phase` to `RUNNING`
-  - `hitRound`: players take turns to make worker move and build with the control of `ActionController`; once winner generates, `phase` changes to `DONE`
-- `ActionController`: `chooseMove` & `chooseBuild`
-  - the validation of each roundAction is checked
-  - control is taken over back and forth between itself and `GameController`
-    - after "Move" roundAction to check if a winner appears
-    - also after "Build" roundAction to let players take turns
-
----
-
-> In this hw3, I also write a `MockGameLoader`, which copies the code from `hw1&2` and do a little change, for the purpose of testing. (No need to invoke a whole bunch of methods repeatedly). And the `Action` class is highly dependent on the designed structure of mock actions (for testing purpose), whose implementation will change when a real GUI interface is integrated. Also, I follow the writeup of HW2 and do not write tests for `Loader` and a series of getters in `Action`.
+Also, the application of controller supports reuse because it serves as an interface to the core logic and supports extensibility.
