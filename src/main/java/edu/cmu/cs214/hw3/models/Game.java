@@ -12,7 +12,7 @@ public class Game {
     private Player playerA;
     private Player playerB;
     private Player currentPlayer;
-    private final Configurator configurator;
+    private Configurator configurator;
     private RoundAction roundAction;
     private String message;
     private String phase;
@@ -62,6 +62,9 @@ public class Game {
             message = "Sorry, game needs at least 2 players to start.";
             return false;
         }
+        // Remove all the previous game status
+        this.roundAction = new RoundAction();
+        this.configurator = new Configurator(board);
 
         playerA = new Player("A" + nameA);
         playerB = new Player("B" + nameB);
@@ -95,6 +98,7 @@ public class Game {
 
         configurator.matchPickStartingPositionURL();
         phase = "running";
+        message = "Now it's " + currentPlayer.getName().substring(1) + "'s turn!";
         return true;
     }
 
@@ -225,6 +229,7 @@ public class Game {
         if (currentPlayer == null) return;
         currentPlayer = (currentPlayer == playerA) ? playerB : playerA;
         roundAction = new RoundAction();
+        message = "Now it's " + currentPlayer.getName().substring(1) + "'s turn!";
     }
 
 
@@ -244,9 +249,9 @@ public class Game {
 
         if (winner != null){
             isRunning = false;
-            configurator.initCellURL();
+            configurator.initCells();
+            phase = "start game";
             message = "Congratulation! " + winner.getName().substring(1) + " is the winner!";
-
         }
     }
 }
