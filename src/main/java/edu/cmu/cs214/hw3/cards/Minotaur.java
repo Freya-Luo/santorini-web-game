@@ -8,6 +8,13 @@ import java.util.List;
 
 public class Minotaur extends God {
 
+    /**
+     * Push opponent worker to a new position along the pushing direction.
+     *
+     * @param game current game
+     * @param pushTo the position of the opponent's worker
+     * @param workerPos current worker position
+     */
     private Cell pushOpponentTo(Cell workerPos, Cell pushTo, Game game) {
         // Apply Minotaur God Rule
         int[] relativePos = {workerPos.getX() - pushTo.getX(), workerPos.getY() - pushTo.getY()};

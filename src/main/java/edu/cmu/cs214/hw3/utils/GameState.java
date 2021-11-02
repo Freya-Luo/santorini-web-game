@@ -7,7 +7,10 @@ import edu.cmu.cs214.hw3.models.Player;
 
 import java.util.Arrays;
 
-
+/**
+ * This file updates the game status for rendering game in the web page. It only works for the implementation
+ * of GUI, and does not relate to anything of the domain core design.
+ */
 public class GameState {
 
     private final String message;

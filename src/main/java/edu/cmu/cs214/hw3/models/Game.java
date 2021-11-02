@@ -141,6 +141,12 @@ public class Game {
         return true;
     }
 
+    /**
+     * Choose a worker based on the selected position
+     *
+     * @param curPos current position for choosing a worker
+     * @return True if worker exists; false otherwise
+     */
     public boolean chooseWorker(int[] curPos) {
         if (!isRunning) return false;
 
@@ -154,6 +160,11 @@ public class Game {
         return true;
     }
 
+    /**
+     * Get a list of movable cells for the current selected worker
+     *
+     * @return The list of movable cells
+     */
     public List<Cell> computeMovableCells() {
         Worker roundWorker = roundAction.getRoundWorker();
         God currentGod = currentPlayer.getGod();
@@ -172,6 +183,12 @@ public class Game {
         return movableCells;
     }
 
+    /**
+     * Move the current worker to the selected position
+     *
+     * @param movePos selected move to position
+     * @return True if move is successful; false otherwise
+     */
     public boolean roundMove(int[] movePos) {
         Worker roundWorker = roundAction.getRoundWorker();
         List<Cell> possibleMoves = roundAction.getRoundPossibleMoves();
@@ -190,6 +207,11 @@ public class Game {
         return true;
     }
 
+    /**
+     * Get a list of buildable cells for the current selected worker
+     *
+     * @return The list of buildable cells
+     */
     public List<Cell> computeBuildableCells() {
         Worker roundWorker = roundAction.getRoundWorker();
         God currentGod = currentPlayer.getGod();
@@ -204,6 +226,12 @@ public class Game {
         return buildableCells;
     }
 
+    /**
+     * Build blocks on the selected position
+     *
+     * @param buildPos selected build on position
+     * @return True if build is successful; false otherwise
+     */
     public boolean roundBuild(int[] buildPos) {
         List<Cell> possibleBuilds = roundAction.getRoundPossibleBuilds();
         Cell buildOn = board.getCell(buildPos[0], buildPos[1]);
@@ -221,6 +249,9 @@ public class Game {
         return true;
     }
 
+    /**
+     * Player take turns after each round
+     */
     public void takeTurns() {
         configurator.matchTakeTurnURL();
         if (currentPlayer == null) return;
@@ -229,7 +260,9 @@ public class Game {
         message = "Now it's " + currentPlayer.getName().substring(1) + "'s turn!";
     }
 
-
+    /**
+     * Check if game has a winner currently
+     */
     public void checkWinner() {
         // After move, check if worker wins
         roundAction.getRoundWorker().checkIfWin();

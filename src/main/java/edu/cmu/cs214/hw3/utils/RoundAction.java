@@ -6,10 +6,7 @@ import edu.cmu.cs214.hw3.models.Worker;
 import java.util.List;
 
 /**
- * This RoundAction class closely depends on the MockGameLoader I created, which also
- * serves to simplify testing. Also, by following the writeup of HW2, this class is
- * not tested in this homework as all the public methods are getters. These contain
- * trivial or non-essential functionalities.
+ * This file records the essential information in each round (move and build).
  */
 public class RoundAction {
     private Worker roundWorker;

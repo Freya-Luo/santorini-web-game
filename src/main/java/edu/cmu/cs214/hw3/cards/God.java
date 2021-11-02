@@ -67,10 +67,22 @@ public abstract class God {
     }
 
 
+    /**
+     * Move the current worker to the selected cell.
+     *
+     * @param worker Chosen worker
+     * @param moveTo Position the worker is going to move to
+     * @param game Current game
+     */
     public void doMove(Worker worker, Cell moveTo, Game game) {
         worker.setCurPosition(moveTo);
     }
 
+    /**
+     * Build blocks/dome on the selected cell.
+     *
+     * @param buildOn Position the worker is going to build on
+     */
     public void doBuild(Cell buildOn) {
         buildOn.addLevel();
     }

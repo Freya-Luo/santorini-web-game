@@ -3,6 +3,11 @@ package edu.cmu.cs214.hw3.utils;
 import edu.cmu.cs214.hw3.models.Board;
 import edu.cmu.cs214.hw3.models.Cell;
 
+/**
+ * This file changes the cell link after certain steps/status of the game. It only works for the implementation
+ * of GUI, and does not relate to anything of the domain core design.
+ */
+
 public class Configurator {
     private Board board;
 
