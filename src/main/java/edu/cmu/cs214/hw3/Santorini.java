@@ -14,12 +14,12 @@ import java.util.Map;
  * 1) "/initGame?nameA=&nameB=" => initGame(nameA, nameB)
  * 2) "/chooseGod?godA=&godB=" => chooseGod(godA, godB)
  * 3) "/pickStartingPosition?x=&y=" => x, y -> int[] pos => pickStartingPosition(pos)
- * 4) "/round?x=&y=" => x, y -> int[] curPos => chooseWorker(curPos) -> computeMovableCells() (check if size == 0, redirect to choose another one)
+ * 4) "/round?x=&y=" => x, y -> int[] curPos => chooseWorker(curPos) -> computeMovableCells() (check if size == 0, if yes then redirect to choose another one)
  * 5) "/round/move?x=&y=" => x, y -> int[] movePos => roundMove(movePos) -> if fail (choose another cell, otherwise continue)
  *  => call getWinner(), if not -> computeBuildableCells() (check if size == 0, lose)
  * 7) "/round/build?x=&y=" => x, y -> int[] buildPos => roundBuild(buildPos) if fail (redirect to another cell), otherwise
  *  => check if canAdditionalBuild() -> no, takeTurns() => yes render UI
- *     7.1) again => yes -> 7); no -> takeTurns()
+ *     7.1) "?again" => yes -> 7.2); no -> takeTurns()
  */
 public final class Santorini extends NanoHTTPD {
 
