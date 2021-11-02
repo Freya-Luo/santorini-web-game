@@ -20,6 +20,12 @@ public class Athena extends God {
         }
     }
 
+    /**
+     * Fix the opponent's movable cells by forbidding him to move up if he moves up in this turn.
+     * @param possibleCells Opponent's current possible cells to move
+     * @param worker current worker
+     * @return Opponent's fixed movable cells
+     */
      @Override
      public List<Cell> applyOpponentPowerToMove(List<Cell> possibleCells, Worker worker) {
         // Apply Athena God Rule;
