@@ -4,6 +4,7 @@ import edu.cmu.cs214.hw3.models.Game;
 import edu.cmu.cs214.hw3.models.Cell;
 import edu.cmu.cs214.hw3.models.Worker;
 
+import java.awt.desktop.SystemEventListener;
 import java.util.List;
 
 public class Demeter extends God {
@@ -28,7 +29,7 @@ public class Demeter extends God {
         oldPosition = buildOn;
 
         // If player choose "Yes", then set for the next round
-        if (!notAskYet && !isAnsYes) {
+        if (!notAskYet && isAnsYes) {
             oldPosition = null;
         }
     }
